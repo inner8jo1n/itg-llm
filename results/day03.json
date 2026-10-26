@@ -1,0 +1,144 @@
+{
+  "summary": {
+    "total": 6,
+    "failed": [],
+    "by_category": {
+      "question": 3,
+      "complaint": 1,
+      "news": 1,
+      "feedback": 1,
+      "other": 0
+    },
+    "by_sentiment": {
+      "positive": 1,
+      "neutral": 3,
+      "negative": 2
+    },
+    "by_priority": {
+      "high": [
+        "02_complaint"
+      ],
+      "medium": [
+        "01_question",
+        "04_english",
+        "05_short"
+      ],
+      "low": [
+        "03_news",
+        "06_feedback"
+      ]
+    }
+  },
+  "records": [
+    {
+      "name": "01_question",
+      "prompt": "v5_structured",
+      "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+      "result": {
+        "summary": "Автор хочет создать сервис на Python с использованием LLM и ищет советы по началу и экономии затрат.",
+        "category": "question",
+        "sentiment": "neutral",
+        "key_points": [
+          "Разработка сервиса на Python и LLM",
+          "Вопрос о начале работы с API и промптами",
+          "Как снизить расходы на запросы"
+        ],
+        "final_answer": "Рекомендуется сначала изучить промпты для эффективного взаимодействия с моделью, а затем подключать API. Используйте тестовые режимы и лимиты, чтобы контролировать расходы во время экспериментов."
+      },
+      "priority": "medium",
+      "issues": []
+    },
+    {
+      "name": "02_complaint",
+      "prompt": "v5_structured",
+      "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+      "result": {
+        "summary": "Пользователь жалуется на задержку доставки заказа №48213, оплату и отсутствие ответа от поддержки.",
+        "category": "complaint",
+        "sentiment": "negative",
+        "key_points": [
+          "Заказ оплачен 2 октября",
+          "Посылка задерживается без объяснений",
+          "Нет ответа от службы поддержки"
+        ],
+        "final_answer": "Рекомендуется связаться с курьерской службой и поддержкой для выяснения ситуации. Если проблема не решится, оформите возврат через банк и оставьте отзыв."
+      },
+      "priority": "high",
+      "issues": []
+    },
+    {
+      "name": "03_news",
+      "prompt": "v5_structured",
+      "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+      "result": {
+        "summary": "Городские власти запускают пилотный проект беспилотных автобусов с операторами в центре города.",
+        "category": "news",
+        "sentiment": "neutral",
+        "key_points": [
+          "Запуск пилотного проекта автобусов",
+          "Первые автобусы в декабре",
+          "План расширения до 60 машин к 2028 году"
+        ],
+        "final_answer": "Это новость о внедрении беспилотных автобусов, которая может улучшить транспортную систему города. Следите за развитием проекта и его результатами."
+      },
+      "priority": "low",
+      "issues": []
+    },
+    {
+      "name": "04_english",
+      "prompt": "v5_structured",
+      "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+      "result": {
+        "summary": "The team shifted to continuous deployment, increasing release frequency and alerts, but faces flaky tests and potential burnout issues.",
+        "category": "question",
+        "sentiment": "neutral",
+        "key_points": [
+          "Shifted to continuous deployment",
+          "Alerts have doubled",
+          "Flaky end-to-end tests are unresolved"
+        ],
+        "final_answer": "Focus on stabilizing flaky tests and improving alert management first. Consider adjusting on-call rotations and providing support to prevent burnout while maintaining deployment pace."
+      },
+      "priority": "medium",
+      "issues": []
+    },
+    {
+      "name": "05_short",
+      "prompt": "v5_structured",
+      "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+      "result": {
+        "summary": "После обновления ничего не открывается, и пользователь ищет решение.",
+        "category": "question",
+        "sentiment": "negative",
+        "key_points": [
+          "Обновление вызвало проблему с открытием",
+          "Пользователь ищет решение",
+          "Проблема возникла после вчерашнего обновления"
+        ],
+        "final_answer": "Попробуйте перезагрузить устройство, очистить кэш или восстановить систему до предыдущей версии. Если проблема сохраняется, обратитесь в техническую поддержку."
+      },
+      "priority": "medium",
+      "issues": []
+    },
+    {
+      "name": "06_feedback",
+      "prompt": "v5_structured",
+      "text": "Хочу сказать спасибо курьеру Андрею: привёз заказ на час раньше, помог занести тяжёлую коробку на пятый этаж и был очень вежлив. Давно не встречал такого отношения, обязательно буду заказывать у вас ещё.",
+      "result": {
+        "summary": "Автор выражает благодарность курьеру за своевременную доставку и вежливое обслуживание.",
+        "category": "feedback",
+        "sentiment": "positive",
+        "key_points": [
+          "Курьер Андрей привёз заказ раньше срока",
+          "Он помог занести тяжелую коробку",
+          "Автор планирует заказывать снова"
+        ],
+        "final_answer": "Спасибо за положительный отзыв! Мы рады, что вы остались довольны обслуживанием, и будем стараться поддерживать такой уровень сервиса."
+      },
+      "priority": "low",
+      "issues": [
+        "final_answer speaks as 'we'"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,654 @@
+[
+  {
+    "name": "01_question",
+    "prompt": "v1_basic",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "error": "Request timed out.",
+    "run": 1
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v1_basic",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "error": "Request timed out.",
+    "run": 1
+  },
+  {
+    "name": "03_news",
+    "prompt": "v1_basic",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Городские власти запускают пилотный проект беспилотных автобусов на двух маршрутах, с планами расширения в будущем.",
+      "key_points": [
+        "Пилотный проект начнется с шести автобусов в декабре.",
+        "В течение первых трех месяцев в автобусах будет оператор для перехвата управления.",
+        "При успешном завершении проекта парк расширится до 60 машин к 2028 году."
+      ],
+      "response": "Это интересный шаг к развитию умных городов и транспорта. Рекомендуется следить за результатами пилота и подготовиться к возможным изменениям в транспортной системе города."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "04_english",
+    "prompt": "v1_basic",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "The team transitioned to continuous deployment, resulting in faster releases but increased alerts and unresolved flaky tests. Management wants to maintain this pace despite these challenges.",
+      "key_points": [
+        "The team shifted from weekly to continuous deployment with smaller, faster releases.",
+        "Alerts have doubled, and flaky end-to-end tests lack ownership.",
+        "Management aims to sustain the current deployment speed without causing burnout."
+      ],
+      "response": "To prevent burnout, consider prioritizing the resolution of flaky tests and improving alert management. It may also help to assign ownership of flaky tests and review alert thresholds to reduce noise. Taking these steps can help maintain the team's momentum while addressing key issues."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "05_short",
+    "prompt": "v1_basic",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "Пользователь столкнулся с проблемой после обновления, когда ничего не открывается. Он ищет решение или помощь.",
+      "key_points": [
+        "После обновления возникла проблема с открытием приложений или файлов.",
+        "Проблема сохраняется после вчерашнего обновления.",
+        "Пользователь ищет советы или инструкции по решению проблемы."
+      ],
+      "response": "Попробуйте перезагрузить устройство и проверить наличие дополнительных обновлений или исправлений. Если проблема сохраняется, обратитесь в службу поддержки или попробуйте восстановить систему до предыдущей версии."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "01_question",
+    "prompt": "v1_basic",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "Автор — начинающий разработчик на Python, который хочет создать сервис с использованием LLM и ищет советы по началу работы и экономии бюджета. Он задается вопросами о порядке действий и управлении затратами.",
+      "key_points": [
+        "Автор хочет использовать LLM для ответа на вопросы пользователей.",
+        "Он не уверен, с чего начать — с изучения промптов или с подключения API.",
+        "Он ищет способы снизить расходы на запросы во время экспериментов."
+      ],
+      "response": "Рекомендуется сначала ознакомиться с основами промптов, чтобы лучше понять, как эффективно взаимодействовать с моделью, а затем подключить API. Для экономии бюджета можно использовать бесплатные тарифы или ограничивать количество запросов во время экспериментов. Также стоит рассмотреть использование локальных моделей или тестовых сред для практики."
+    },
+    "issues": [
+      "summary is 207 chars (max 200)"
+    ],
+    "run": 2
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v1_basic",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "Пользователь жалуется на задержку доставки заказа №48213, оплаченного 2 октября, и отсутствие ответа от службы поддержки.",
+      "key_points": [
+        "Заказ оплачен 2 октября, доставка должна была быть до 9-го числа.",
+        "Посылка до сих пор в обработке, курьерская служба не получала её.",
+        "Пользователь планирует оформить возврат и оставить отзыв, если проблема не решится."
+      ],
+      "response": "Рекомендуем вам снова связаться с поддержкой и указать все детали заказа. Также стоит запросить у службы доставки подтверждение статуса посылки. Надеемся, ситуация скоро разрешится, и вы получите свой заказ или возврат средств."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "03_news",
+    "prompt": "v1_basic",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Городские власти запускают пилотный проект беспилотных автобусов на двух маршрутах с планами расширения парка до 60 машин к 2028 году.",
+      "key_points": [
+        "Пилотный проект начнется с шести автобусов в декабре.",
+        "В течение первых трех месяцев в каждом автобусе будет оператор.",
+        "Если проект успешен, парк автобусов расширится до 60 машин к 2028 году."
+      ],
+      "response": "Это интересный шаг в развитии городского транспорта. Рекомендуется следить за результатами пилота и подготовить планы по интеграции новых технологий в инфраструктуру города."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "04_english",
+    "prompt": "v1_basic",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "The team transitioned to continuous deployment, resulting in faster releases but increased alerts and unresolved flaky tests, raising concerns about burnout.",
+      "key_points": [
+        "The team shifted from weekly to continuous deployment with smaller, faster releases.",
+        "Alerts have doubled, causing potential stress for on-call engineers.",
+        "There is a lack of ownership over flaky end-to-end tests, impacting stability."
+      ],
+      "response": "To prevent burnout, consider prioritizing the stabilization of end-to-end tests and implementing alert management strategies. Addressing these issues first can improve stability and reduce stress, helping the team maintain their new deployment pace."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "05_short",
+    "prompt": "v1_basic",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "Пользователь сталкивается с проблемой после обновления, когда ничего не открывается.",
+      "key_points": [
+        "Обновление вызвало проблему с открытием приложений или файлов.",
+        "Проблема возникла сразу после обновления.",
+        "Пользователь ищет решение или помощь."
+      ],
+      "response": "Попробуйте перезагрузить устройство и проверить наличие дополнительных обновлений или исправлений. Также стоит обратиться в службу поддержки или поискать решение в интернете, чтобы устранить проблему."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "01_question",
+    "prompt": "v2_strict",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "Начинающему разработчику важно понять основы промптов и оптимизировать запросы, чтобы эффективно использовать API и контролировать расходы.",
+      "key_points": [
+        "Изучите основы промптов для LLM",
+        "Оптимизируйте запросы для снижения затрат",
+        "Пробуйте бесплатные или тестовые версии API"
+      ],
+      "response": "Рекомендуется сначала разобраться с промптами, чтобы лучше управлять запросами и расходами. Затем подключайте API, экспериментируя с настройками для экономии бюджета."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v2_strict",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "Проблема с задержкой и отсутствием доставки заказа №48213, деньги списаны, поддержки нет, угрожает возвратом и отзывом.",
+      "key_points": [
+        "Заказ оплачен 2 октября, доставка задерживается.",
+        "Курьерская служба не получала посылку.",
+        "Автор готов оформить возврат и оставить отзыв."
+      ],
+      "response": "Извините за неудобства. Мы проверим статус заказа и свяжемся с вами для решения проблемы в ближайшее время."
+    },
+    "issues": [
+      "response speaks as 'we'"
+    ],
+    "run": 1
+  },
+  {
+    "name": "03_news",
+    "prompt": "v2_strict",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Город запускает пилотный проект беспилотных автобусов с оператором, планируя расширение до 60 машин к 2028 году.",
+      "key_points": [
+        "Запуск пилотных автобусов в центре города",
+        "Операторы будут контролировать первые три месяца",
+        "План расширения парка до 60 машин"
+      ],
+      "response": "Это отличный шаг к развитию умных городов. Следите за результатами пилота и возможными улучшениями. Удачи в реализации проекта!"
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "04_english",
+    "prompt": "v2_strict",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "Transition to continuous deployment increased alert volume and flaky tests, risking team burnout.",
+      "key_points": [
+        "Increase test reliability to reduce alerts",
+        "Assign ownership of flaky tests",
+        "Balance deployment pace to prevent burnout"
+      ],
+      "response": "Focus on fixing flaky tests and clarifying ownership to reduce alerts. Consider adjusting deployment speed if team stress rises. Prioritizing stability can sustain your rapid release cycle."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "05_short",
+    "prompt": "v2_strict",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "Проблема с открытием после обновления вызывает у автора неудобства.",
+      "key_points": [
+        "Обновление могло вызвать сбои",
+        "Проблема связана с программным обеспечением",
+        "Нужно искать решение или поддержку"
+      ],
+      "response": "Попробуйте перезагрузить устройство и проверить обновления. Обратитесь в поддержку, если проблема сохраняется. Возможно, потребуется переустановка программы."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "01_question",
+    "prompt": "v2_strict",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "Начинающему разработчику важно понять работу с промптами и API для эффективных и экономных экспериментов с LLM.",
+      "key_points": [
+        "Изучить основы промптов для лучшей настройки",
+        "Понять работу OpenAI API и его цены",
+        "Экспериментировать с бесплатными тарифами"
+      ],
+      "response": "Рекомендуется сначала разобраться с промптами для оптимизации запросов. Затем изучите API и его тарифы, чтобы избежать лишних затрат. Начинайте с бесплатных тестов и постепенно расширяйте проект."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v2_strict",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "Клиент жалуется на задержку и отсутствие ответа по заказу №48213, оплаченного 2 октября, доставка задерживается без информации от службы поддержки.",
+      "key_points": [
+        "Заказ оплачен 2 октября, доставка задерживается.",
+        "Курьерская служба не получила посылку.",
+        "Клиент готовит возврат и отзыв."
+      ],
+      "response": "Извините за задержку и неудобства. Мы проверим статус заказа и свяжемся с вами в ближайшее время для решения проблемы."
+    },
+    "issues": [
+      "response speaks as 'we'"
+    ],
+    "run": 2
+  },
+  {
+    "name": "03_news",
+    "prompt": "v2_strict",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Город запускает пилотный проект беспилотных автобусов с оператором, планируя расширение до 60 машин к 2028 году.",
+      "key_points": [
+        "Запуск на двух маршрутах в центре",
+        "Первые три месяца с оператором",
+        "План расширения до 60 автобусов"
+      ],
+      "response": "Это важный шаг к автоматизации транспорта. Следите за обновлениями о результатах пилота и возможных изменениях в расписании или тарифах."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "04_english",
+    "prompt": "v2_strict",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "Transition to continuous deployment increased alert volume and flaky tests, risking team burnout.",
+      "key_points": [
+        "Increase test stability and ownership",
+        "Implement alert management strategies",
+        "Balance deployment pace with team well-being"
+      ],
+      "response": "Prioritize fixing flaky tests and clarifying ownership to reduce alerts. Consider adjusting deployment frequency if needed to prevent burnout and maintain quality."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "05_short",
+    "prompt": "v2_strict",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "Проблема с открытием после обновления вызывает у автора раздражение и поиск решения.",
+      "key_points": [
+        "Обновление вызвало проблему с открытием",
+        "Автор ищет решение проблемы",
+        "Проблема повторяется после обновления"
+      ],
+      "response": "Попробуйте перезагрузить устройство и проверить обновления. Если не поможет, обратитесь в поддержку или переустановите приложение."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "01_question",
+    "prompt": "v3_role",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "The author is a beginner Python developer planning to create a service using LLMs and seeks advice on starting points and cost management.",
+      "key_points": [
+        "Decide whether to learn prompt engineering first",
+        "Consider initial testing with free or low-cost options",
+        "Plan to optimize API usage to control expenses"
+      ],
+      "response": "Start by experimenting with prompt design to understand how to get desired responses. Use OpenAI's free trial credits or explore cheaper alternatives for initial testing. Once comfortable, integrate the API and optimize prompts to reduce costs."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 1
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v3_role",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "The customer reports a delayed order with no delivery update despite payment, and threatens to initiate a refund.",
+      "key_points": [
+        "Order №48213 paid on October 2",
+        "Delivery was due by October 9",
+        "Package still in processing, no courier transfer"
+      ],
+      "response": "It is advisable to contact the seller again for a status update and request proof of shipment. If unresolved, consider filing a formal complaint or initiating a refund through your bank."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 1
+  },
+  {
+    "name": "03_news",
+    "prompt": "v3_role",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Городские власти запускают пилотный проект беспилотных автобусов на двух маршрутах с оператором в течение первых трёх месяцев.",
+      "key_points": [
+        "Автобусы начнут курсировать в декабре",
+        "Будут работать с 7 до 23 часов",
+        "Планируют расширение до 60 машин к 2028 году"
+      ],
+      "response": "Это важный шаг к внедрению беспилотных технологий в общественный транспорт. Следите за результатами пилота, чтобы понять его эффективность и возможные улучшения."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "04_english",
+    "prompt": "v3_role",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "The team shifted to continuous deployment, increasing deployment frequency and alerts, raising concerns about burnout and test ownership.",
+      "key_points": [
+        "Deployment speed increased with smaller releases",
+        "Alerts have doubled",
+        "Ownership of flaky tests is unclear"
+      ],
+      "response": "Prioritize stabilizing end-to-end tests to reduce false alerts and improve reliability. Clearly assign ownership of flaky tests to prevent burnout and maintain the new deployment pace."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "05_short",
+    "prompt": "v3_role",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "After an update, the user cannot open any applications and seeks advice.",
+      "key_points": [
+        "Applications do not open after update",
+        "User is seeking a solution",
+        "Issue started after recent update"
+      ],
+      "response": "Try restarting your device and checking for further updates or patches. If the problem persists, consider reinstalling the affected applications or restoring your system to a previous state."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 1
+  },
+  {
+    "name": "01_question",
+    "prompt": "v3_role",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "The author is a beginner Python developer planning to create a Q&A service using LLM and seeks advice on starting points and cost management.",
+      "key_points": [
+        "Decide whether to learn prompt engineering first",
+        "Consider initial testing with free or low-cost options",
+        "Plan to optimize API usage to control expenses"
+      ],
+      "response": "Start by experimenting with prompt design to improve responses and reduce costs. Use OpenAI's free tier or sandbox environments for testing before deploying the full service. Monitor API usage to avoid unexpected expenses."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 2
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v3_role",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "The customer is frustrated with a delayed order, unpaid courier transfer, and lack of support response.",
+      "key_points": [
+        "Order №48213 delayed beyond 9 days",
+        "Courier service hasn't received the parcel",
+        "No response from support despite payment"
+      ],
+      "response": "Recommend contacting the seller again with proof of payment and order details. If unresolved, consider filing a formal complaint or initiating a chargeback through your bank."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 2
+  },
+  {
+    "name": "03_news",
+    "prompt": "v3_role",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Городские власти запускают пилотный проект беспилотных автобусов на двух маршрутах с оператором в течение первых трех месяцев.",
+      "key_points": [
+        "Пилот начнется в декабре",
+        "Автобусы будут с оператором три месяца",
+        "Планируют расширение до 60 машин к 2028 году"
+      ],
+      "response": "Если проект успешен, ожидается расширение парка беспилотных автобусов. Следите за обновлениями городских властей о ходе пилота и возможных изменениях в расписании."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "04_english",
+    "prompt": "v3_role",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "The team shifted to continuous deployment, increasing release frequency and alert volume, raising concerns about burnout and test ownership.",
+      "key_points": [
+        "Faster releases with smaller deploys",
+        "Increased alerts and flaky tests",
+        "Management wants to maintain pace"
+      ],
+      "response": "Prioritize automating and stabilizing end-to-end tests to reduce flaky alerts. Clarify ownership of tests and set boundaries to prevent burnout. Communicate with management about sustainable release practices."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "05_short",
+    "prompt": "v3_role",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "After an update, the user cannot open any applications as usual.",
+      "key_points": [
+        "Applications do not open after update",
+        "The issue started immediately after the update",
+        "User seeks a solution"
+      ],
+      "response": "Try restarting your device and checking for additional updates. If the problem persists, consider reinstalling the affected applications or restoring your system to a previous state."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 2
+  },
+  {
+    "name": "01_question",
+    "prompt": "v4_role_ru",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "Начинающий разработчик спрашивает, с чего начать создание сервиса на Python с LLM и как экономить на запросах.",
+      "key_points": [
+        "Стоит сначала разобраться с промптами",
+        "Подключение API лучше делать после понимания промптов",
+        "Используйте тестовые ключи и лимиты для экономии"
+      ],
+      "response": "Рекомендуется сначала изучить работу с промптами, чтобы эффективно формировать запросы. Затем подключайте API, используя тестовые ключи и контролируйте расходы, чтобы не потратить много денег во время экспериментов."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v4_role_ru",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "Пользователь жалуется на задержку доставки заказа №48213 и отсутствие ответа поддержки.",
+      "key_points": [
+        "Заказ оплачен 2 октября",
+        "Посылка до сих пор в обработке",
+        "Нет ответа от службы поддержки"
+      ],
+      "response": "Рекомендуется повторно связаться с поддержкой и потребовать уточнения статуса заказа. Если ситуация не решится, оформите возврат через банк и оставьте отзыв о сервисе."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "03_news",
+    "prompt": "v4_role_ru",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Город запускает пилотный проект беспилотных автобусов на двух маршрутах с оператором в течение первых трёх месяцев.",
+      "key_points": [
+        "Автобусы начнут работу в декабре",
+        "В каждом автобусе будет оператор",
+        "Планируют расширение до 60 машин к 2028 году"
+      ],
+      "response": "Если проект успешен, это может значительно изменить общественный транспорт в городе. Следите за новостями о результатах пилота и возможных расширениях."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "04_english",
+    "prompt": "v4_role_ru",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "Команда перешла на непрерывную доставку, что увеличило частоту релизов и нагрузку на инженеров.",
+      "key_points": [
+        "Частота релизов увеличилась",
+        "Обнаружены флаткие тесты и больше тревог",
+        "Менеджмент хочет сохранить быстрый темп"
+      ],
+      "response": "Рекомендуется автоматизировать flaky тесты и улучшить мониторинг. Также стоит пересмотреть нагрузку на команду и внедрить практики для предотвращения выгорания."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 1
+  },
+  {
+    "name": "05_short",
+    "prompt": "v4_role_ru",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "После обновления ничего не открывается, и автор ищет решение проблемы.",
+      "key_points": [
+        "Обновление вызвало проблему с открытием приложений",
+        "Автор ищет способы исправить ситуацию",
+        "Проблема возникла после последнего обновления"
+      ],
+      "response": "Попробуйте перезагрузить устройство и проверить наличие новых обновлений. Если проблема сохраняется, обратитесь в техническую поддержку или попробуйте восстановить систему до предыдущего состояния."
+    },
+    "issues": [],
+    "run": 1
+  },
+  {
+    "name": "01_question",
+    "prompt": "v4_role_ru",
+    "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+    "result": {
+      "summary": "Автор — начинающий разработчик на Python, планирует создать сервис с LLM и ищет советы по началу работы и экономии средств.",
+      "key_points": [
+        "Стоит сначала разобраться с промптами",
+        "Подключение OpenAI API — следующий шаг",
+        "Для экономии используйте тестовые режимы и лимиты"
+      ],
+      "response": "Рекомендуется сначала изучить работу с промптами, чтобы оптимизировать запросы и снизить расходы. После этого подключайте API, устанавливая лимиты и тестируя на небольших объемах данных, чтобы избежать лишних затрат."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "02_complaint",
+    "prompt": "v4_role_ru",
+    "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+    "result": {
+      "summary": "Пользователь жалуется на задержку доставки заказа №48213 и отсутствие ответа поддержки.",
+      "key_points": [
+        "Заказ оплачен 2 октября",
+        "Посылка до сих пор в обработке",
+        "Нет ответа от службы поддержки"
+      ],
+      "response": "Рекомендуется повторно связаться с поддержкой, указав все детали заказа. Если ситуация не решится, оформите возврат через банк и оставьте отзыв."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "03_news",
+    "prompt": "v4_role_ru",
+    "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+    "result": {
+      "summary": "Город запускает пилотный проект беспилотных автобусов на двух маршрутах с оператором в течение первых трёх месяцев.",
+      "key_points": [
+        "Автобусы начнут работу в декабре",
+        "В каждом автобусе будет оператор",
+        "Планируется расширение до 60 машин к 2028 году"
+      ],
+      "response": "Если проект успешен, это может значительно улучшить транспортную систему города. Следите за обновлениями о ходе пилота и возможных изменениях в расписании."
+    },
+    "issues": [],
+    "run": 2
+  },
+  {
+    "name": "04_english",
+    "prompt": "v4_role_ru",
+    "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+    "result": {
+      "summary": "Команда перешла на непрерывную доставку, что увеличило частоту релизов и нагрузку на инженеров.",
+      "key_points": [
+        "Частота релизов выросла после перехода",
+        "Обнаружены флаткие тесты и увеличение тревог",
+        "Менеджмент хочет сохранить текущий ритм"
+      ],
+      "response": "Рекомендуется сосредоточиться на автоматизации устранения флатких тестов и оптимизации системы оповещений, чтобы снизить стресс и предотвратить выгорание команды."
+    },
+    "issues": [
+      "summary is not in the text's language",
+      "response is not in the text's language"
+    ],
+    "run": 2
+  },
+  {
+    "name": "05_short",
+    "prompt": "v4_role_ru",
+    "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+    "result": {
+      "summary": "После обновления ничего не открывается, и автор ищет решение проблемы.",
+      "key_points": [
+        "Обновление вызвало проблему с открытием приложений",
+        "Автор не знает, что делать дальше",
+        "Проблема возникла после вчерашнего обновления"
+      ],
+      "response": "Попробуйте перезагрузить устройство и проверить наличие дополнительных обновлений. Если проблема сохраняется, выполните восстановление системы или обратитесь в техническую поддержку."
+    },
+    "issues": [],
+    "run": 2
+  }
+]

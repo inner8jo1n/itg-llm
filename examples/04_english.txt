@@ -1,0 +1,1 @@
+Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?

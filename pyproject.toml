@@ -1,13 +1,22 @@
 [project]
 name = "itg-llm"
 version = "0.1.0"
-description = "Add your description here"
+description = "LLM pipeline for text processing: summary, key points and a helpful response"
 readme = "README.md"
 authors = [
     { name = "imiderji", email = "skishou.developer@yandex.ru" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "openai>=3.36.1",
+    "pydantic>=2.14.1",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+itg-llm = "itg_llm.main:main"
+itg-llm-compare = "itg_llm.compare:main"
+itg-llm-check-replies = "itg_llm.check_replies:main"
 
 [build-system]
 requires = ["uv_build>=0.10.10,<0.11.0"]
