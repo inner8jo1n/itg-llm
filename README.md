@@ -1,204 +1,230 @@
 # itg-llm
 
-LLM pipeline for text processing. For any text the model returns a JSON
-object that is validated with a Pydantic schema:
+Учебный mini-product для обработки пользовательских обращений через LLM.
+Принимает текст, извлекает смысл и факты, определяет категорию и намерение,
+выбирает способ ответа, формирует структурированный JSON и проверяет ответ.
+Работает через CLI с OpenAI-совместимым API.
 
-| Field          | Type                                                    |
-|----------------|---------------------------------------------------------|
-| `summary`      | non-empty string, 1 sentence                            |
-| `category`     | `question`, `complaint`, `news`, `feedback` or `other`  |
-| `sentiment`    | `positive`, `neutral` or `negative`                     |
-| `key_points`   | non-empty list of non-empty strings (3 expected)        |
-| `final_answer` | non-empty string, a short helpful answer to the author  |
+## Установка
 
-The code then uses `category` and `sentiment` to set a priority for every
-text and to build a summary of the whole run.
-
-## Setup
+Нужны Python **3.13+** и **uv**. Команды выполняются из корня репозитория.
+Если uv ещё не установлен, установите его по
+[официальной инструкции](https://docs.astral.sh/uv/getting-started/installation/).
 
 ```bash
-uv sync
-cp .env.example .env   # then put your key into .env
+cd /path/to/itg-llm
+uv sync --locked
+uv run itg-llm --help
 ```
 
-`.env` variables:
+`uv sync --locked` создаёт `.venv`, устанавливает проект, зависимости из
+`uv.lock` и инструменты разработки. При первом запуске нужен доступ
+к реестру пакетов; uv также может скачать нужный Python.
 
-| Variable          | Meaning                                                        |
-|-------------------|----------------------------------------------------------------|
-| `OPENAI_API_KEY`  | API key (required)                                             |
-| `OPENAI_BASE_URL` | empty for OpenAI, or the URL of a compatible API (OpenRouter, Ollama, ...) |
-| `OPENAI_MODEL`    | model name, `gpt-4o-mini` by default                           |
-
-## Usage
+## Быстрая демонстрация без ключа
 
 ```bash
-make run                                   # all texts from examples/
-make run-text TEXT="My order is late"      # one text
-make run-file FILE=examples/03_news.txt    # one file
-make check-replies                         # validate broken replies, no API
+uv run itg-llm-demo
 ```
 
-or directly: `uv run itg-llm --help`.
+Пять сценариев проходят все этапы конвейера. Результат —
+`results/demo.json`, в консоли видны этапы и выбранные маршруты.
 
-Results are printed to the console and saved to `results/output.json`
-(`--output` changes the path):
+**Это воспроизведение подготовленных вручную ответов, без вызова модели.**
+В JSON оно помечено `"mode": "recorded_demo"`. Демо проверяет запуск,
+валидацию, маршрутизацию и сборку результата; его точность 5/5 не является
+оценкой качества LLM. Входы, ответы этапов и пример итогового JSON находятся
+в [demo/](demo/README.md).
+
+```bash
+uv run itg-llm-demo --scenario sales
+uv run itg-llm-demo --output results/my_demo.json
+```
+
+## API-ключ и модель
+
+Для анализа произвольного текста создайте `.env` из примера, если файла ещё нет:
+
+```bash
+cp .env.example .env
+```
+
+Укажите в `.env`:
+
+```dotenv
+OPENAI_API_KEY=your-key-here
+OPENAI_BASE_URL=
+OPENAI_MODEL=gpt-4o-mini
+```
+
+| Переменная | Назначение |
+|---|---|
+| `OPENAI_API_KEY` | Ключ выбранного провайдера, обязателен для реального запуска |
+| `OPENAI_BASE_URL` | Пусто для OpenAI; URL API совместимого провайдера, если используется другой сервис |
+| `OPENAI_MODEL` | Имя модели у провайдера; по умолчанию `gpt-4o-mini` |
+
+`.env` исключён из Git. Провайдер должен поддерживать Chat Completions,
+JSON mode, `temperature` и `max_tokens`. Наличие совместимого URL само по
+себе не гарантирует поддержку всех параметров конкретной моделью.
+
+## Реальный запуск
+
+Один текст:
+
+```bash
+uv run itg-llm --text "Не могу войти в личный кабинет" --output results/one.json
+```
+
+Файл или все 10 примеров:
+
+```bash
+uv run itg-llm --file examples/02_complaint.txt --output results/complaint.json
+uv run itg-llm --output results/live.json
+```
+
+Собственная папка с `.txt`:
+
+```bash
+uv run itg-llm --examples /path/to/texts --output results/custom.json
+```
+
+Без `--output` результат записывается в `results/output.json`.
+Повторная запись в тот же путь заменяет файл. Папка создаётся автоматически.
+Опции `--text` и `--file` взаимоисключающие; без них читается `--examples`
+(по умолчанию `examples/`).
+
+Вызовы API могут быть платными: обычно на текст приходится 5 запросов,
+7 при одной смысловой доработке. Retry и fallback могут увеличить это число.
+Тексты обрабатываются последовательно.
+
+## Пять демонстрационных сценариев
+
+| Сценарий | Вход для реальной модели | Ожидаемый способ ответа |
+|---|---|---|
+| `support` | [Проблема входа](examples/08_support.txt) | Нумерованные технические шаги |
+| `complaint` | [Задержка заказа](examples/02_complaint.txt) | Эмпатия, действия и эскалация |
+| `sales` | [Стоимость тарифа](examples/07_sales.txt) | Короткий ответ с пользой и следующим шагом |
+| `feedback` | [Благодарность курьеру](examples/06_feedback.txt) | Благодарность с конкретной деталью |
+| `question` | [Начало работы с LLM](examples/01_question.txt) | Прямой ответ и практические советы |
+
+Остальные входы покрывают новости, короткий неясный запрос, тестовое сообщение
+и английский язык. Ожидаемые категории — в `examples/labels.json`.
+
+## Вход и выход
+
+Например, текст «Не могу войти в личный кабинет…» из support-сценария
+даёт такой фрагмент [подготовленного результата](demo/output.json):
 
 ```json
 {
-  "summary": {
-    "total": 6,
-    "failed": [],
-    "by_category": {"question": 2, "complaint": 1, "news": 1, "feedback": 1, "other": 1},
-    "by_sentiment": {"positive": 1, "neutral": 2, "negative": 3},
-    "by_priority": {"high": ["02_complaint"], "medium": ["01_question"], "low": ["03_news"]}
-  },
-  "records": [
-    {
-      "name": "02_complaint",
-      "prompt": "v5_structured",
-      "text": "...",
-      "result": {
-        "summary": "...",
-        "category": "complaint",
-        "sentiment": "negative",
-        "key_points": ["...", "...", "..."],
-        "final_answer": "..."
-      },
-      "priority": "high",
-      "issues": []
-    }
-  ]
+  "category": "support",
+  "intent": "fix_login",
+  "sentiment": "negative",
+  "subject": "Личный кабинет",
+  "requested_action": "Помочь восстановить доступ.",
+  "details": ["«Сессия истекла»"],
+  "missing_info": ["Адрес сайта", "Версия браузера"],
+  "final_answer": "1. Проверьте дату и время на устройстве. 2. Удалите cookies только для этого сайта и повторите вход. 3. Если ошибка сохранится, обратитесь в поддержку с описанием уже выполненных действий. Какой адрес сайта и версия браузера?"
 }
 ```
 
-### Priority
+Это часть `record.result`. Полный JSON содержит:
 
-`priority` is computed in code from the validated fields, not by the model:
+- `summary`: количество обработанных текстов, категории, маршруты, приоритеты,
+  итоги самопроверки и точность классификации при наличии разметки;
+- `records`: входной `text`, `result`, `route`, `priority`, `check`,
+  замечания `issues` и трассировку `steps`;
+- `result`: также `summary`, `author_goal`, `key_points`, `facts`;
+- `steps`: выход и длительность каждого этапа, решение маршрутизации,
+  повторная генерация после самопроверки, если она потребовалась.
 
-| Category  | Sentiment | Priority |
-|-----------|-----------|----------|
-| complaint | negative  | high     |
-| complaint | other     | medium   |
-| question  | any       | medium   |
-| other     | negative  | medium   |
-| other     | other     | low      |
+Необработанный текст получает `error` вместо `result`; остальные тексты
+продолжают обрабатываться. Код завершения CLI: **0** при отсутствии ошибок
+обработки, **1** при ошибке ввода, API, валидации или сохранения,
+**2** при неверных аргументах. Замечания `issues` и отрицательный self-check
+после исчерпания доработок сами по себе не меняют код 0.
 
-The run summary counts texts per category and sentiment and lists the
-texts of every priority, so the most urgent ones are visible at once.
+## Как работает конвейер
 
-### Issues
-
-`issues` lists soft problems of a valid answer: length limits, not exactly
-3 key points, a language other than the text's, or an answer that speaks
-as "we" (as if the assistant were the company). Issues are also logged as
-warnings.
-
-## Validation and errors
-
-The API is called in JSON mode (`response_format={"type": "json_object"}`)
-and the reply is validated with `schemas.parse_response`. A reply that is
-wrapped in a ```` ```json ```` fence is unwrapped first; labels are
-accepted in any case (`"Complaint"` becomes `complaint`).
-
-A broken reply never crashes the run: the text gets an `"error"` field
-instead of `"result"`, the error is logged and the other texts are still
-processed (the exit code is 1). The error says exactly what is wrong:
-
-```
-Model returned an empty reply
-Model returned invalid JSON: Expecting ',' delimiter (line 1, column 179)
-Model returned a JSON list instead of an object
-Model JSON does not match the schema: field 'sentiment' is missing; field 'final_answer' is missing
-Model JSON does not match the schema: field 'key_points' must be a list, got string
-Model JSON does not match the schema: field 'category' must be one of question, complaint, news, feedback or other, got 'rant'
+```text
+Текст → extract → classify → route → fields → answer → self-check
+                                                 ↑          │
+                                                 └──────────┘
+                                            одна доработка при противоречии
 ```
 
-`make check-replies` runs the saved broken replies from
-`examples/bad_replies/` through the same validation without calling the
-API.
+| Этап | Использует | Возвращает |
+|---|---|---|
+| Extract | Исходный текст | Содержание, цель автора, ключевые мысли, факты |
+| Classify | Текст, содержание и цель | Категорию, intent, тональность |
+| Route, код | Категорию | Инструкции и лимит длины |
+| Fields | Текст, смысл и классификацию | Предмет, действие, детали, недостающую информацию |
+| Answer | Предыдущие результаты и маршрут | `final_answer` |
+| Self-check | Текст, факты, детали, маршрут и ответ | Противоречия, пропуски, комментарий |
 
-## Prompts
+| Категория | Маршрут | Лимит символов |
+|---|---|---|
+| `support` | `technical_steps` | 450 |
+| `complaint` | `empathetic` | 450 |
+| `sales` | `short_sales` | 220 |
+| `feedback` | `thanks` | 200 |
+| `general_question` | `direct_answer` | 350 |
+| `news` | `explain_news` | 250 |
+| `other` | `clarify` | 150 |
 
-The prompt is `v5_structured` in `prompts.py`. The allowed `category` and
-`sentiment` values are taken from the schema enums, so the prompt and the
-schema cannot drift apart. The answer language is detected in code
-(`utils.language`) and named in the prompt explicitly ("in Russian" /
-"in English").
+Приоритет вычисляется кодом по категории и тональности. Негативные
+support/complaint получают высокий приоритет. Routing задан таблицей
+в `routing.py`, а не скрыт внутри одного промпта.
 
-### Day 2: comparing prompt variants
+## Ошибки и ограничения
+
+- JSON mode и Pydantic проверяют формат, поля, типы и метки категорий.
+- При плохом ответе выполняется один fallback с исходным контекстом,
+  ошибкой и JSON Schema. Это действует на всех пяти LLM-этапах.
+- Временные ошибки соединения, таймауты, HTTP 408/409/429 и 5xx повторяются
+  до двух раз с паузами 0,5 и 1 секунда. Остальные HTTP-ошибки завершаются сразу.
+- Таймаут SDK — 30 секунд на сетевые операции; это не дедлайн всего прогона.
+- Выход ограничен 2048 токенами; сырой ответ — 32 000 символов.
+  Лимит `final_answer` проверяется строго, без автоматической обрезки.
+- Self-check запускает одну доработку при противоречиях. Пропущенные детали
+  записываются в `issues`. Проверка длины summary, ключевых мыслей,
+  языка и стиля также формирует замечания.
+- Самопроверка той же моделью не гарантирует истинность ответа.
+  Определение языка упрощённое: русский/английский. Внешние источники фактов
+  и RAG не используются.
+
+Retry, fallback, этапы и ошибки видны в логах. Политика восстановления
+подробно описана в [отчёте дня 6](results/day06_report.md).
+
+## Структура
+
+```text
+src/itg_llm/       CLI, pipeline, API-клиент, схемы, промпты и guardrails
+examples/          10 входных текстов, разметка и плохие ответы для проверки
+demo/             5 сценариев воспроизведения, инструкция и пример JSON
+tests/            автоматические тесты без внешнего API
+scripts/          запуск проверок
+docs/             история экспериментов и разработки
+results/          сохранённые прогоны и отчёты
+pyproject.toml     зависимости и CLI-команды
+uv.lock            зафиксированные версии зависимостей
+.env.example       пример настройки провайдера
+Makefile           сокращения команд
+```
+
+## Проверки и дополнительные команды
 
 ```bash
-make compare           # every variant x every example x 2 runs
-make compare RUNS=3
+make check                         # lint, форматирование, типы и тесты
+uv run itg-llm-check-replies        # проверка плохих JSON без API
+uv run itg-llm --route sales         # принудительный маршрут, вызывает API
+uv run itg-llm-compare-routes --file examples/02_complaint.txt
+uv run itg-llm-compare --runs 2      # повторяемость; сейчас доступен v7_extract
 ```
 
-All answers go to `results/comparison.json`, the summary table to
-`results/comparison.md` (one row per prompt variant): failed answers,
-answers with issues, total issues, average summary and answer length and
-the answer length spread between runs of the same text (lower is more
-stable).
+`make demo`, `make run`, `make run-file FILE=...` и `make run-text TEXT="..."`
+сокращают соответствующие CLI-команды. Для полного списка опций используйте
+`--help` у нужной команды.
 
-Results of day 2 (`gpt-4.1-nano`, 5 examples x 2 runs,
-`results/day02_comparison.*`). The variants v1-v4 used the old answer
-format (`response` instead of `final_answer`, no category and sentiment)
-and were replaced by `v5_structured` on day 3.
-
-| Prompt | Answers | Failed | With issues | Issues | Avg summary chars | Avg response chars | Response length spread |
-|---|---|---|---|---|---|---|---|
-| v1_basic | 10 | 2 | 1 | 1 | 140 | 234 | 10 |
-| v2_strict | 10 | 0 | 2 | 2 | 108 | 149 | 20 |
-| v3_role | 10 | 0 | 6 | 12 | 116 | 192 | 14 |
-| v4_role_ru | 10 | 0 | 2 | 4 | 97 | 175 | 9 |
-
-- **v1_basic** (no limits): the longest summaries and responses, goes over
-  the summary limit, reacts to news with "good luck with the project".
-  The 2 failed answers were API timeouts, not the prompt's fault.
-- **v2_strict** (limits only): short and compact, but without a role it
-  answers the complaint as the shop in both runs: "Sorry for the delay,
-  we will check your order and contact you". That is the worst answer in
-  the comparison: the assistant promises actions nobody will take.
-- **v3_role** (limits + neutral role + English example): the best content
-  (concrete next steps, no "we"), but the model copies the language of the
-  example and answers 3 of 4 Russian texts in English in both runs.
-- **v4_role_ru** (v3 + Russian example + explicit language rule): all
-  Russian texts are answered in Russian, no "we", the shortest summaries
-  and the most stable response length (spread 9). The same effect now goes
-  the other way: the English text is answered in Russian.
-
-**Chosen: `v4_role_ru`**, the base of `v5_structured`. Takeaways:
-- limits in the prompt work: summaries and responses got shorter and
-  more even, with no length violations from v2-v4;
-- the role in the system prompt decides *whose voice* the answer has,
-  limits alone do not fix that;
-- a few-shot example is followed more strongly than an explicit
-  instruction, including its language, which is why v5 names the answer
-  language explicitly.
-
-## Project structure
-
-```
-src/itg_llm/
-  llm_client.py     # the only module that calls the LLM API
-  prompts.py        # prompt (system prompt + user template) and limits
-  schemas.py        # Pydantic schema, parsing and readable errors
-  quality.py        # soft checks of a valid answer against the limits
-  report.py         # priority from category + sentiment, run summary
-  utils.py          # language detection
-  main.py           # process_text + CLI
-  compare.py        # runs prompt variants side by side
-  check_replies.py  # validates saved replies without the API
-examples/           # sample input texts
-examples/bad_replies/  # broken model replies for make check-replies
-results/            # pipeline output
-tests/              # tests, the LLM is replaced with a fake
-```
-
-## Development
-
-```bash
-make test        # pytest
-make lint        # ruff check
-make format      # ruff format
-make typecheck   # ty
-make check       # all of the above
-```
+История предыдущих этапов — в [docs/development-history.md](docs/development-history.md).
+Проверка финальной поставки — в [results/day07_report.md](results/day07_report.md).

@@ -2,21 +2,21 @@ import argparse
 import sys
 from pathlib import Path
 
-from itg_llm.schemas import LLMOutputError, parse_response
+from itg_llm.schemas import Classification, LLMOutputError, parse_response
 
 REPLIES_DIR = Path("examples/bad_replies")
 
 
 def check_reply(raw: str) -> str:
-    """Validate one saved model reply and describe the outcome."""
+    """Validate one saved classification reply and describe the outcome."""
     try:
-        result = parse_response(raw)
+        result = parse_response(raw, Classification)
     except LLMOutputError as error:
         return f"ERROR: {error}"
     return (
         f"OK: category={result.category.value}, "
-        f"sentiment={result.sentiment.value}, "
-        f"{len(result.key_points)} key points"
+        f"intent={result.intent}, "
+        f"sentiment={result.sentiment.value}"
     )
 
 

@@ -1,25 +1,31 @@
 import pytest
 
-from itg_llm.prompts import (
-    MAX_ANSWER_CHARS,
-    MAX_KEY_POINT_WORDS,
-    MAX_SUMMARY_CHARS,
-)
+from itg_llm.prompts import MAX_KEY_POINT_WORDS, MAX_SUMMARY_CHARS
 from itg_llm.quality import check_quality
-from itg_llm.schemas import AnalysisResult
+from itg_llm.routing import ROUTES
+from itg_llm.schemas import AnalysisResult, Category
 
 GOOD = {
     "summary": "Заказ задерживается на две недели.",
-    "category": "complaint",
-    "sentiment": "negative",
+    "author_goal": "Получить заказ.",
     "key_points": ["Заказ оплачен", "Срок доставки прошёл", "Ответа нет"],
+    "facts": [],
+    "category": "complaint",
+    "intent": "get_order",
+    "sentiment": "negative",
+    "subject": "Заказ",
+    "requested_action": "Доставить заказ",
+    "details": [],
+    "missing_info": [],
     "final_answer": "Напишите в поддержку ещё раз и приложите номер заказа.",
 }
 TEXT = "Мой заказ опаздывает уже две недели, поддержка молчит."
+COMPLAINT = ROUTES[Category.COMPLAINT]
+SUPPORT = ROUTES[Category.SUPPORT]
 
 
-def check(data):
-    return check_quality(AnalysisResult.model_validate(data), TEXT)
+def check(data, route=COMPLAINT):
+    return check_quality(AnalysisResult.model_validate(data), TEXT, route)
 
 
 def test_good_result_has_no_issues():
@@ -47,12 +53,34 @@ def test_long_key_point():
     ]
 
 
-def test_long_final_answer():
-    result = {**GOOD, "final_answer": "д" * (MAX_ANSWER_CHARS + 1)}
-    assert check(result) == [
-        f"final_answer is {MAX_ANSWER_CHARS + 1} chars "
-        f"(max {MAX_ANSWER_CHARS})"
+def test_answer_longer_than_the_route_allows():
+    sales = ROUTES[Category.SALES]
+    result = {**GOOD, "final_answer": "д" * (sales.max_chars + 1)}
+
+    assert check(result, COMPLAINT) == []
+    assert check(result, sales) == [
+        f"final_answer is {sales.max_chars + 1} chars "
+        f"(max {sales.max_chars} for short_sales)"
     ]
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        "1. Очистите кэш. 2. Перезапустите приложение.",
+        "Попробуйте так:\n1) очистите кэш;\n2) перезапустите.",
+    ],
+)
+def test_support_answer_with_numbered_steps(answer):
+    assert check({**GOOD, "final_answer": answer}, SUPPORT) == []
+
+
+def test_support_answer_without_numbered_steps():
+    result = {**GOOD, "final_answer": "Очистите кэш и перезапустите."}
+    assert check(result, SUPPORT) == [
+        "final_answer has no numbered steps (technical_steps)"
+    ]
+    assert check(result, COMPLAINT) == []
 
 
 def test_wrong_language():

@@ -17,10 +17,12 @@ NonEmptyStr = Annotated[
 
 
 class Category(StrEnum):
-    QUESTION = "question"
+    SUPPORT = "support"
     COMPLAINT = "complaint"
-    NEWS = "news"
+    SALES = "sales"
     FEEDBACK = "feedback"
+    GENERAL_QUESTION = "general_question"
+    NEWS = "news"
     OTHER = "other"
 
 
@@ -30,32 +32,71 @@ class Sentiment(StrEnum):
     NEGATIVE = "negative"
 
 
-class AnalysisResult(BaseModel):
-    """The structured answer the model must return for one text."""
+class Meaning(BaseModel):
+    """Step 1, extract: what the text says and what its author wants."""
 
     summary: NonEmptyStr
-    category: Category
-    sentiment: Sentiment
+    author_goal: NonEmptyStr
     key_points: list[NonEmptyStr] = Field(min_length=1)
-    final_answer: NonEmptyStr
+    facts: list[NonEmptyStr]
+
+
+class Classification(BaseModel):
+    """Step 2, classify: the kind of request, from its meaning."""
+
+    category: Category
+    intent: NonEmptyStr
+    sentiment: Sentiment
 
     @field_validator("category", "sentiment", mode="before")
     @classmethod
     def normalize_label(cls, value: object) -> object:
-        # Models often write "Complaint" or " negative"
+        # Models often write "Complaint", " negative" or "general question"
         if isinstance(value, str):
-            return value.strip().lower()
+            return re.sub(r"[\s-]+", "_", value.strip().lower())
         return value
 
 
+class RequestFields(BaseModel):
+    """Step 3, build fields: what an answer to this request has to cover."""
+
+    subject: NonEmptyStr
+    requested_action: NonEmptyStr
+    details: list[NonEmptyStr]
+    missing_info: list[NonEmptyStr]
+
+
+class Answer(BaseModel):
+    """Step 4, answer: the routed answer to the author."""
+
+    final_answer: NonEmptyStr
+
+
+class SelfCheck(BaseModel):
+    """Step 5, self-check: problems of the answer against the text."""
+
+    contradictions: list[NonEmptyStr]
+    missing_details: list[NonEmptyStr]
+    comment: NonEmptyStr
+
+    @property
+    def passed(self) -> bool:
+        """A contradiction is an error; a missing detail is only a remark."""
+        return not self.contradictions
+
+
+class AnalysisResult(Answer, RequestFields, Classification, Meaning):
+    """The full result of one text: the outputs of every step together."""
+
+
 class LLMOutputError(ValueError):
-    """The model's reply cannot be turned into an AnalysisResult."""
+    """The model's reply cannot be turned into the expected schema."""
 
 
 CODE_FENCE = re.compile(r"^```(?:json)?\s*(.*?)\s*```$", re.DOTALL)
 
 
-def parse_response(raw: str) -> AnalysisResult:
+def parse_response[Model: BaseModel](raw: str, schema: type[Model]) -> Model:
     """Parse and validate the model's reply, explaining what is wrong."""
     text = raw.strip()
     fenced = CODE_FENCE.match(text)
@@ -77,7 +118,7 @@ def parse_response(raw: str) -> AnalysisResult:
         )
 
     try:
-        return AnalysisResult.model_validate(data)
+        return schema.model_validate(data)
     except ValidationError as error:
         problems = [_describe(item) for item in error.errors()]
         raise LLMOutputError(

@@ -1,0 +1,12 @@
+{
+  "01_question": "general_question",
+  "02_complaint": "complaint",
+  "03_news": "news",
+  "04_english": "general_question",
+  "05_short": "support",
+  "06_feedback": "feedback",
+  "07_sales": "sales",
+  "08_support": "support",
+  "09_sales_en": "sales",
+  "10_other": "other"
+}

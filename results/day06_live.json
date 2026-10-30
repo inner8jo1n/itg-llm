@@ -1,0 +1,1140 @@
+{
+  "summary": {
+    "total": 10,
+    "failed": [
+      "01_question"
+    ],
+    "by_category": {
+      "support": 4,
+      "complaint": 1,
+      "sales": 2,
+      "feedback": 1,
+      "general_question": 0,
+      "news": 1,
+      "other": 0
+    },
+    "by_sentiment": {
+      "positive": 1,
+      "neutral": 6,
+      "negative": 2
+    },
+    "by_route": {
+      "empathetic": 1,
+      "explain_news": 1,
+      "technical_steps": 4,
+      "thanks": 1,
+      "short_sales": 2
+    },
+    "by_priority": {
+      "high": [
+        "02_complaint",
+        "05_short"
+      ],
+      "medium": [
+        "04_english",
+        "07_sales",
+        "08_support",
+        "09_sales_en",
+        "10_other"
+      ],
+      "low": [
+        "03_news",
+        "06_feedback"
+      ]
+    },
+    "self_check": {
+      "passed": [
+        "02_complaint",
+        "03_news",
+        "04_english",
+        "05_short",
+        "06_feedback",
+        "07_sales",
+        "08_support",
+        "09_sales_en",
+        "10_other"
+      ],
+      "revised": [],
+      "failed": []
+    },
+    "accuracy": {
+      "correct": 7,
+      "total": 9,
+      "mismatches": [
+        {
+          "name": "04_english",
+          "expected": "general_question",
+          "got": "support"
+        },
+        {
+          "name": "10_other",
+          "expected": "other",
+          "got": "support"
+        }
+      ]
+    }
+  },
+  "records": [
+    {
+      "name": "01_question",
+      "prompt": "v7_extract",
+      "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+      "error": "LLM API failed after 3 attempt(s): APITimeoutError"
+    },
+    {
+      "name": "02_complaint",
+      "prompt": "v7_extract",
+      "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+      "result": {
+        "summary": "Автор жалуется на задержку доставки заказа №48213, оплаченного 2 октября, и отсутствие ответа поддержки.",
+        "author_goal": "Автор хочет получить посылку или оформить возврат и оставить отзыв.",
+        "key_points": [
+          "Заказ №48213, оплачен 2 октября",
+          "Доставка должна была быть до 9-го",
+          "Посылка до сих пор в обработке"
+        ],
+        "facts": [
+          "Заказ №48213",
+          "Оплата 2 октября",
+          "Срок доставки до 9-го",
+          "Сегодня 21-е",
+          "Посылка в обработке",
+          "Курьерская служба не передавала посылку"
+        ],
+        "category": "complaint",
+        "intent": "request_refund",
+        "sentiment": "negative",
+        "subject": "заказ",
+        "requested_action": "Автор хочет получить посылку или оформить возврат и оставить отзыв.",
+        "details": [
+          "Заказ №48213",
+          "Оплата 2 октября",
+          "Срок доставки до 9-го",
+          "Сегодня 21-е",
+          "Посылка в обработке",
+          "Курьерская служба не передавала посылку"
+        ],
+        "missing_info": [],
+        "final_answer": "Понимаю ваше разочарование из-за задержки заказа №48213. Рекомендуем связаться с нашей службой поддержки для уточнения статуса и получить информацию о возможных действиях. Если ситуация не решится в ближайшее время, вы можете оформить возврат через банк или оставить отзыв. Для дальнейшей помощи, пожалуйста, предоставьте контактные данные или обратитесь по указанным каналам."
+      },
+      "route": "empathetic",
+      "priority": "high",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "Заказ №48213",
+          "Оплата 2 октября",
+          "Срок доставки до 9-го",
+          "Сегодня 21-е",
+          "Посылка в обработке",
+          "Курьерская служба не передавала посылку"
+        ],
+        "comment": "Ответ не полностью отражает все указанные факты и не содержит конкретных шагов, соответствующих требованиям инструкции."
+      },
+      "issues": [
+        "final_answer speaks as 'we'",
+        "self-check: missing detail: Заказ №48213",
+        "self-check: missing detail: Оплата 2 октября",
+        "self-check: missing detail: Срок доставки до 9-го",
+        "self-check: missing detail: Сегодня 21-е",
+        "self-check: missing detail: Посылка в обработке",
+        "self-check: missing detail: Курьерская служба не передавала посылку"
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 63422,
+          "output": {
+            "summary": "Автор жалуется на задержку доставки заказа №48213, оплаченного 2 октября, и отсутствие ответа поддержки.",
+            "author_goal": "Автор хочет получить посылку или оформить возврат и оставить отзыв.",
+            "key_points": [
+              "Заказ №48213, оплачен 2 октября",
+              "Доставка должна была быть до 9-го",
+              "Посылка до сих пор в обработке"
+            ],
+            "facts": [
+              "Заказ №48213",
+              "Оплата 2 октября",
+              "Срок доставки до 9-го",
+              "Сегодня 21-е",
+              "Посылка в обработке",
+              "Курьерская служба не передавала посылку"
+            ]
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 944,
+          "output": {
+            "category": "complaint",
+            "intent": "request_refund",
+            "sentiment": "negative"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "complaint",
+            "route": "empathetic",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1180,
+          "output": {
+            "subject": "заказ",
+            "requested_action": "Автор хочет получить посылку или оформить возврат и оставить отзыв.",
+            "details": [
+              "Заказ №48213",
+              "Оплата 2 октября",
+              "Срок доставки до 9-го",
+              "Сегодня 21-е",
+              "Посылка в обработке",
+              "Курьерская служба не передавала посылку"
+            ],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1298,
+          "output": {
+            "final_answer": "Понимаю ваше разочарование из-за задержки заказа №48213. Рекомендуем связаться с нашей службой поддержки для уточнения статуса и получить информацию о возможных действиях. Если ситуация не решится в ближайшее время, вы можете оформить возврат через банк или оставить отзыв. Для дальнейшей помощи, пожалуйста, предоставьте контактные данные или обратитесь по указанным каналам."
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 2932,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "Заказ №48213",
+              "Оплата 2 октября",
+              "Срок доставки до 9-го",
+              "Сегодня 21-е",
+              "Посылка в обработке",
+              "Курьерская служба не передавала посылку"
+            ],
+            "comment": "Ответ не полностью отражает все указанные факты и не содержит конкретных шагов, соответствующих требованиям инструкции."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03_news",
+      "prompt": "v7_extract",
+      "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+      "result": {
+        "summary": "Город запускает пилотный проект беспилотных автобусов на двух маршрутах в центре города.",
+        "author_goal": "Автор хочет информировать о запуске и планах расширения проекта.",
+        "key_points": [
+          "Запуск пилотных автобусов в центре города",
+          "Первые шесть машин в декабре, с оператором",
+          "План расширения до 60 машин к 2028 году"
+        ],
+        "facts": [
+          "Первые шесть машин выйдут на линию в декабре",
+          "Работать с 7 до 23 часов",
+          "Первые три месяца в каждом автобусе будет оператор",
+          "К 2028 году парк планируют расширить до 60 машин"
+        ],
+        "category": "news",
+        "intent": "inform_about_project",
+        "sentiment": "neutral",
+        "subject": "беспилотные автобусы",
+        "requested_action": "ничего",
+        "details": [
+          "Первые шесть машин выйдут на линию в декабре",
+          "Работать с 7 до 23 часов",
+          "Первые три месяца в каждом автобусе будет оператор",
+          "К 2028 году парк планируют расширить до 60 машин"
+        ],
+        "missing_info": [],
+        "final_answer": "В декабре начнется запуск первых шести беспилотных автобусов с операторами в течение трех месяцев, а к 2028 году парк планируют расширить до 60 машин. Следите за обновлениями о расширении и работе автобусов."
+      },
+      "route": "explain_news",
+      "priority": "low",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "Первый запуск шести машин в декабре",
+          "Работа с 7 до 23 часов",
+          "Первые три месяца в каждом автобусе будет оператор",
+          "К 2028 году парк планируют расширить до 60 машин"
+        ],
+        "comment": "Ответ содержит правильную информацию, но не полностью отражает все указанные детали из текста."
+      },
+      "issues": [
+        "self-check: missing detail: Первый запуск шести машин в декабре",
+        "self-check: missing detail: Работа с 7 до 23 часов",
+        "self-check: missing detail: Первые три месяца в каждом автобусе будет оператор",
+        "self-check: missing detail: К 2028 году парк планируют расширить до 60 машин"
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 1376,
+          "output": {
+            "summary": "Город запускает пилотный проект беспилотных автобусов на двух маршрутах в центре города.",
+            "author_goal": "Автор хочет информировать о запуске и планах расширения проекта.",
+            "key_points": [
+              "Запуск пилотных автобусов в центре города",
+              "Первые шесть машин в декабре, с оператором",
+              "План расширения до 60 машин к 2028 году"
+            ],
+            "facts": [
+              "Первые шесть машин выйдут на линию в декабре",
+              "Работать с 7 до 23 часов",
+              "Первые три месяца в каждом автобусе будет оператор",
+              "К 2028 году парк планируют расширить до 60 машин"
+            ]
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 793,
+          "output": {
+            "category": "news",
+            "intent": "inform_about_project",
+            "sentiment": "neutral"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "news",
+            "route": "explain_news",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1252,
+          "output": {
+            "subject": "беспилотные автобусы",
+            "requested_action": "ничего",
+            "details": [
+              "Первые шесть машин выйдут на линию в декабре",
+              "Работать с 7 до 23 часов",
+              "Первые три месяца в каждом автобусе будет оператор",
+              "К 2028 году парк планируют расширить до 60 машин"
+            ],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1052,
+          "output": {
+            "final_answer": "В декабре начнется запуск первых шести беспилотных автобусов с операторами в течение трех месяцев, а к 2028 году парк планируют расширить до 60 машин. Следите за обновлениями о расширении и работе автобусов."
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 1845,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "Первый запуск шести машин в декабре",
+              "Работа с 7 до 23 часов",
+              "Первые три месяца в каждом автобусе будет оператор",
+              "К 2028 году парк планируют расширить до 60 машин"
+            ],
+            "comment": "Ответ содержит правильную информацию, но не полностью отражает все указанные детали из текста."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04_english",
+      "prompt": "v7_extract",
+      "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+      "result": {
+        "summary": "The team shifted to continuous deployment, facing increased alerts and flaky tests, raising concerns about burnout.",
+        "author_goal": "To maintain the new deployment pace without causing team burnout.",
+        "key_points": [
+          "Shift from weekly releases to continuous deployment",
+          "Alerts have doubled since the change",
+          "Flaky end-to-end tests lack ownership"
+        ],
+        "facts": [],
+        "category": "support",
+        "intent": "request_advice",
+        "sentiment": "neutral",
+        "subject": "deployment process and team well-being",
+        "requested_action": "nothing",
+        "details": [
+          "The team shifted to continuous deployment",
+          "facing increased alerts and flaky tests",
+          "raising concerns about burnout",
+          "Management wants to keep the new pace"
+        ],
+        "missing_info": [],
+        "final_answer": "1. Prioritize fixing flaky tests to reduce false alerts. 2. Implement alert thresholds and noise reduction to prevent alert fatigue. 3. Schedule regular reviews of deployment practices to balance pace and team well-being. 4. Consider automation or dedicated testing to improve test stability. What are the specific error messages and test details?"
+      },
+      "route": "technical_steps",
+      "priority": "medium",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "The team shifted to continuous deployment",
+          "facing increased alerts and flaky tests",
+          "raising concerns about burnout",
+          "Management wants to keep the new pace"
+        ],
+        "comment": "The answer appropriately addresses the issues raised in the text but could better emphasize the management's goal of maintaining the deployment pace without burnout."
+      },
+      "issues": [
+        "self-check: missing detail: The team shifted to continuous deployment",
+        "self-check: missing detail: facing increased alerts and flaky tests",
+        "self-check: missing detail: raising concerns about burnout",
+        "self-check: missing detail: Management wants to keep the new pace"
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 1569,
+          "output": {
+            "summary": "The team shifted to continuous deployment, facing increased alerts and flaky tests, raising concerns about burnout.",
+            "author_goal": "To maintain the new deployment pace without causing team burnout.",
+            "key_points": [
+              "Shift from weekly releases to continuous deployment",
+              "Alerts have doubled since the change",
+              "Flaky end-to-end tests lack ownership"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 1396,
+          "output": {
+            "category": "support",
+            "intent": "request_advice",
+            "sentiment": "neutral"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "support",
+            "route": "technical_steps",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1175,
+          "output": {
+            "subject": "deployment process and team well-being",
+            "requested_action": "nothing",
+            "details": [
+              "The team shifted to continuous deployment",
+              "facing increased alerts and flaky tests",
+              "raising concerns about burnout",
+              "Management wants to keep the new pace"
+            ],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1692,
+          "output": {
+            "final_answer": "1. Prioritize fixing flaky tests to reduce false alerts. 2. Implement alert thresholds and noise reduction to prevent alert fatigue. 3. Schedule regular reviews of deployment practices to balance pace and team well-being. 4. Consider automation or dedicated testing to improve test stability. What are the specific error messages and test details?"
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 1837,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "The team shifted to continuous deployment",
+              "facing increased alerts and flaky tests",
+              "raising concerns about burnout",
+              "Management wants to keep the new pace"
+            ],
+            "comment": "The answer appropriately addresses the issues raised in the text but could better emphasize the management's goal of maintaining the deployment pace without burnout."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05_short",
+      "prompt": "v7_extract",
+      "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+      "result": {
+        "summary": "Автор сталкивается с проблемой после обновления, ничего не открывается.",
+        "author_goal": "Автор хочет решить проблему с открытием после обновления.",
+        "key_points": [
+          "После обновления ничего не открывается",
+          "Автор ищет решение проблемы",
+          "Проблема возникла после вчерашнего обновления"
+        ],
+        "facts": [],
+        "category": "support",
+        "intent": "fix_opening_issue",
+        "sentiment": "negative",
+        "subject": "проблема с открытием после обновления",
+        "requested_action": "Автор хочет решить проблему с открытием после обновления.",
+        "details": [],
+        "missing_info": [
+          "версия приложения или системы",
+          "подробности обновления"
+        ],
+        "final_answer": "1. Попробуйте перезагрузить устройство. 2. Проверьте наличие обновлений для системы или приложения. 3. Удалите и переустановите приложение. Для более точных рекомендаций уточните версию системы или приложения и детали обновления."
+      },
+      "route": "technical_steps",
+      "priority": "high",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "(none)"
+        ],
+        "comment": "Ответ содержит общие рекомендации, но не включает вопрос о конкретных деталях, что требуется по инструкции."
+      },
+      "issues": [
+        "self-check: missing detail: (none)"
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 3632,
+          "output": {
+            "summary": "Автор сталкивается с проблемой после обновления, ничего не открывается.",
+            "author_goal": "Автор хочет решить проблему с открытием после обновления.",
+            "key_points": [
+              "После обновления ничего не открывается",
+              "Автор ищет решение проблемы",
+              "Проблема возникла после вчерашнего обновления"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 1085,
+          "output": {
+            "category": "support",
+            "intent": "fix_opening_issue",
+            "sentiment": "negative"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "support",
+            "route": "technical_steps",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 815,
+          "output": {
+            "subject": "проблема с открытием после обновления",
+            "requested_action": "Автор хочет решить проблему с открытием после обновления.",
+            "details": [],
+            "missing_info": [
+              "версия приложения или системы",
+              "подробности обновления"
+            ]
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1362,
+          "output": {
+            "final_answer": "1. Попробуйте перезагрузить устройство. 2. Проверьте наличие обновлений для системы или приложения. 3. Удалите и переустановите приложение. Для более точных рекомендаций уточните версию системы или приложения и детали обновления."
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 1190,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "(none)"
+            ],
+            "comment": "Ответ содержит общие рекомендации, но не включает вопрос о конкретных деталях, что требуется по инструкции."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06_feedback",
+      "prompt": "v7_extract",
+      "text": "Хочу сказать спасибо курьеру Андрею: привёз заказ на час раньше, помог занести тяжёлую коробку на пятый этаж и был очень вежлив. Давно не встречал такого отношения, обязательно буду заказывать у вас ещё.",
+      "result": {
+        "summary": "Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой.",
+        "author_goal": "Автор хочет выразить благодарность и продолжать заказывать у компании.",
+        "key_points": [
+          "Курьер привёз заказ на час раньше",
+          "Помощь с заносом тяжелой коробки",
+          "Курьер был очень вежлив"
+        ],
+        "facts": [],
+        "category": "feedback",
+        "intent": "say_thanks",
+        "sentiment": "positive",
+        "subject": "доставка и обслуживание курьера",
+        "requested_action": "ничего",
+        "details": [
+          "Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой."
+        ],
+        "missing_info": [],
+        "final_answer": "Спасибо за добрые слова! Рад, что Андрей помог с доставкой и был вежлив. Будем рады видеть вас снова!"
+      },
+      "route": "thanks",
+      "priority": "low",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой."
+        ],
+        "comment": "Ответ не полностью соответствует требованиям, так как не упоминает о своевременной доставке и помощи с тяжелой коробкой, что было указано в деталях."
+      },
+      "issues": [
+        "self-check: missing detail: Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой."
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 901,
+          "output": {
+            "summary": "Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой.",
+            "author_goal": "Автор хочет выразить благодарность и продолжать заказывать у компании.",
+            "key_points": [
+              "Курьер привёз заказ на час раньше",
+              "Помощь с заносом тяжелой коробки",
+              "Курьер был очень вежлив"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 783,
+          "output": {
+            "category": "feedback",
+            "intent": "say_thanks",
+            "sentiment": "positive"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "feedback",
+            "route": "thanks",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1502,
+          "output": {
+            "subject": "доставка и обслуживание курьера",
+            "requested_action": "ничего",
+            "details": [
+              "Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой."
+            ],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 844,
+          "output": {
+            "final_answer": "Спасибо за добрые слова! Рад, что Андрей помог с доставкой и был вежлив. Будем рады видеть вас снова!"
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 2581,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "Автор выражает благодарность курьеру за своевременную доставку и помощь с тяжелой коробкой."
+            ],
+            "comment": "Ответ не полностью соответствует требованиям, так как не упоминает о своевременной доставке и помощи с тяжелой коробкой, что было указано в деталях."
+          }
+        }
+      ]
+    },
+    {
+      "name": "07_sales",
+      "prompt": "v7_extract",
+      "text": "Здравствуйте! Мы небольшая студия из 12 человек и присматриваемся к вашему тарифу «Команда». Сколько он будет стоить на год и есть ли скидка, если оплатить сразу 12 месяцев?",
+      "result": {
+        "summary": "Автор интересуется ценой и скидками на тариф «Команда» для годовой оплаты.",
+        "author_goal": "Получить информацию о стоимости и возможных скидках за оплату сразу на год.",
+        "key_points": [
+          "Студия из 12 человек",
+          "Тариф «Команда»",
+          "Интерес к годовой оплате и скидкам"
+        ],
+        "facts": [],
+        "category": "sales",
+        "intent": "ask_price",
+        "sentiment": "neutral",
+        "subject": "тариф «Команда»",
+        "requested_action": "узнать стоимость и возможные скидки за оплату сразу на год",
+        "details": [],
+        "missing_info": [],
+        "final_answer": "Чтобы узнать стоимость и возможные скидки за годовую оплату тарифа «Команда», пожалуйста, свяжитесь с нашими специалистами или запросите коммерческое предложение."
+      },
+      "route": "short_sales",
+      "priority": "medium",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "main benefit для автора",
+          "один ясный следующий шаг"
+        ],
+        "comment": "Ответ не содержит информации о стоимости или скидках за оплату сразу на год, что является основной целью автора."
+      },
+      "issues": [
+        "final_answer speaks as 'we'",
+        "self-check: missing detail: main benefit для автора",
+        "self-check: missing detail: один ясный следующий шаг"
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 2687,
+          "output": {
+            "summary": "Автор интересуется ценой и скидками на тариф «Команда» для годовой оплаты.",
+            "author_goal": "Получить информацию о стоимости и возможных скидках за оплату сразу на год.",
+            "key_points": [
+              "Студия из 12 человек",
+              "Тариф «Команда»",
+              "Интерес к годовой оплате и скидкам"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 2386,
+          "output": {
+            "category": "sales",
+            "intent": "ask_price",
+            "sentiment": "neutral"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "sales",
+            "route": "short_sales",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1184,
+          "output": {
+            "subject": "тариф «Команда»",
+            "requested_action": "узнать стоимость и возможные скидки за оплату сразу на год",
+            "details": [],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1588,
+          "output": {
+            "final_answer": "Чтобы узнать стоимость и возможные скидки за годовую оплату тарифа «Команда», пожалуйста, свяжитесь с нашими специалистами или запросите коммерческое предложение."
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 1332,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "main benefit для автора",
+              "один ясный следующий шаг"
+            ],
+            "comment": "Ответ не содержит информации о стоимости или скидках за оплату сразу на год, что является основной целью автора."
+          }
+        }
+      ]
+    },
+    {
+      "name": "08_support",
+      "prompt": "v7_extract",
+      "text": "Не могу войти в личный кабинет: после ввода пароля пишет «Сессия истекла» и снова открывает страницу входа. Пароль сбрасывал два раза, пробовал в Chrome и в Safari — одно и то же.",
+      "result": {
+        "summary": "Пользователь не может войти в личный кабинет из-за ошибки 'Сессия истекла'.",
+        "author_goal": "Постараться восстановить доступ к личному кабинету.",
+        "key_points": [
+          "Ошибка 'Сессия истекла' при входе",
+          "Пароль сбрасывал два раза",
+          "Пробовал в Chrome и Safari"
+        ],
+        "facts": [],
+        "category": "support",
+        "intent": "fix_login",
+        "sentiment": "neutral",
+        "subject": "личный кабинет",
+        "requested_action": "постараться восстановить доступ к личному кабинету",
+        "details": [],
+        "missing_info": [],
+        "final_answer": "1. Попробуйте очистить кэш и cookies браузера. 2. Убедитесь, что время и дата на устройстве установлены правильно. 3. Попробуйте войти через приватный режим браузера. 4. Проверьте, используете ли последнюю версию браузера. Какие устройство и версия браузера вы используете?"
+      },
+      "route": "technical_steps",
+      "priority": "medium",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "устройство",
+          "версия браузера",
+          "точный текст ошибки"
+        ],
+        "comment": "Ответ содержит полезные шаги, но не полностью соответствует описанной проблеме и не учитывает конкретную ошибку 'Сессия истекла'."
+      },
+      "issues": [
+        "self-check: missing detail: устройство",
+        "self-check: missing detail: версия браузера",
+        "self-check: missing detail: точный текст ошибки"
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 1648,
+          "output": {
+            "summary": "Пользователь не может войти в личный кабинет из-за ошибки 'Сессия истекла'.",
+            "author_goal": "Постараться восстановить доступ к личному кабинету.",
+            "key_points": [
+              "Ошибка 'Сессия истекла' при входе",
+              "Пароль сбрасывал два раза",
+              "Пробовал в Chrome и Safari"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 1431,
+          "output": {
+            "category": "support",
+            "intent": "fix_login",
+            "sentiment": "neutral"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "support",
+            "route": "technical_steps",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 2804,
+          "output": {
+            "subject": "личный кабинет",
+            "requested_action": "постараться восстановить доступ к личному кабинету",
+            "details": [],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1668,
+          "output": {
+            "final_answer": "1. Попробуйте очистить кэш и cookies браузера. 2. Убедитесь, что время и дата на устройстве установлены правильно. 3. Попробуйте войти через приватный режим браузера. 4. Проверьте, используете ли последнюю версию браузера. Какие устройство и версия браузера вы используете?"
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 1120,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "устройство",
+              "версия браузера",
+              "точный текст ошибки"
+            ],
+            "comment": "Ответ содержит полезные шаги, но не полностью соответствует описанной проблеме и не учитывает конкретную ошибку 'Сессия истекла'."
+          }
+        }
+      ]
+    },
+    {
+      "name": "09_sales_en",
+      "prompt": "v7_extract",
+      "text": "Hi! We're evaluating your API for our online store. Do you offer volume discounts at around 2 million requests a month, and is there a free trial so we can test it first?",
+      "result": {
+        "summary": "The author is inquiring about volume discounts and a free trial for an API for their online store.",
+        "author_goal": "To determine if the API offers discounts and a free trial for testing.",
+        "key_points": [
+          "Requesting volume discounts for 2 million requests",
+          "Asking about a free trial",
+          "Evaluating API suitability for online store"
+        ],
+        "facts": [],
+        "category": "sales",
+        "intent": "ask_discounts_and_trial",
+        "sentiment": "neutral",
+        "subject": "API for online store",
+        "requested_action": "Inquire about volume discounts and free trial availability.",
+        "details": [
+          "The author is inquiring about volume discounts at around 2 million requests a month, and a free trial for testing."
+        ],
+        "missing_info": [],
+        "final_answer": "You can start a free trial to test the API; for volume discounts at around 2 million requests, please contact sales for a tailored quote and options."
+      },
+      "route": "short_sales",
+      "priority": "medium",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [
+          "The author is inquiring about volume discounts at around 2 million requests a month, and a free trial for testing."
+        ],
+        "comment": "The answer correctly addresses the free trial and volume discounts inquiry but does not explicitly mention the free trial as the primary benefit or include the next step as instructed."
+      },
+      "issues": [
+        "self-check: missing detail: The author is inquiring about volume discounts at around 2 million requests a month, and a free trial for testing."
+      ],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 1325,
+          "output": {
+            "summary": "The author is inquiring about volume discounts and a free trial for an API for their online store.",
+            "author_goal": "To determine if the API offers discounts and a free trial for testing.",
+            "key_points": [
+              "Requesting volume discounts for 2 million requests",
+              "Asking about a free trial",
+              "Evaluating API suitability for online store"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 1031,
+          "output": {
+            "category": "sales",
+            "intent": "ask_discounts_and_trial",
+            "sentiment": "neutral"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "sales",
+            "route": "short_sales",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1482,
+          "output": {
+            "subject": "API for online store",
+            "requested_action": "Inquire about volume discounts and free trial availability.",
+            "details": [
+              "The author is inquiring about volume discounts at around 2 million requests a month, and a free trial for testing."
+            ],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 1307,
+          "output": {
+            "final_answer": "You can start a free trial to test the API; for volume discounts at around 2 million requests, please contact sales for a tailored quote and options."
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 1190,
+          "output": {
+            "contradictions": [],
+            "missing_details": [
+              "The author is inquiring about volume discounts at around 2 million requests a month, and a free trial for testing."
+            ],
+            "comment": "The answer correctly addresses the free trial and volume discounts inquiry but does not explicitly mention the free trial as the primary benefit or include the next step as instructed."
+          }
+        }
+      ]
+    },
+    {
+      "name": "10_other",
+      "prompt": "v7_extract",
+      "text": "Привет! Просто проверяю, работает ли этот чат 🙂",
+      "result": {
+        "summary": "Автор проверяет работу чата, чтобы убедиться, что он функционирует правильно.",
+        "author_goal": "Автор хочет проверить работу чата.",
+        "key_points": [
+          "Проверка работы чата",
+          "Использование простого сообщения",
+          "Нет дополнительных деталей"
+        ],
+        "facts": [],
+        "category": "support",
+        "intent": "test_chat_functionality",
+        "sentiment": "neutral",
+        "subject": "функциональность чата",
+        "requested_action": "ничего",
+        "details": [],
+        "missing_info": [],
+        "final_answer": "1. Проверьте подключение к интернету. 2. Обновите страницу или перезапустите приложение. 3. Попробуйте снова отправить сообщение. Если проблема сохраняется, уточните устройство, версию приложения и наличие ошибок."
+      },
+      "route": "technical_steps",
+      "priority": "medium",
+      "check": {
+        "passed": true,
+        "revisions": 0,
+        "contradictions": [],
+        "missing_details": [],
+        "comment": "Ответ содержит рекомендации, которые не соответствуют цели проверить работу чата, так как он предполагает устранение проблем, а не просто проверку его функционирования."
+      },
+      "issues": [],
+      "steps": [
+        {
+          "step": "extract",
+          "revision": 0,
+          "ms": 1366,
+          "output": {
+            "summary": "Автор проверяет работу чата, чтобы убедиться, что он функционирует правильно.",
+            "author_goal": "Автор хочет проверить работу чата.",
+            "key_points": [
+              "Проверка работы чата",
+              "Использование простого сообщения",
+              "Нет дополнительных деталей"
+            ],
+            "facts": []
+          }
+        },
+        {
+          "step": "classify",
+          "revision": 0,
+          "ms": 628,
+          "output": {
+            "category": "support",
+            "intent": "test_chat_functionality",
+            "sentiment": "neutral"
+          }
+        },
+        {
+          "step": "route",
+          "revision": 0,
+          "ms": 0,
+          "output": {
+            "category": "support",
+            "route": "technical_steps",
+            "forced": false
+          }
+        },
+        {
+          "step": "fields",
+          "revision": 0,
+          "ms": 1583,
+          "output": {
+            "subject": "функциональность чата",
+            "requested_action": "ничего",
+            "details": [],
+            "missing_info": []
+          }
+        },
+        {
+          "step": "answer",
+          "revision": 0,
+          "ms": 799,
+          "output": {
+            "final_answer": "1. Проверьте подключение к интернету. 2. Обновите страницу или перезапустите приложение. 3. Попробуйте снова отправить сообщение. Если проблема сохраняется, уточните устройство, версию приложения и наличие ошибок."
+          }
+        },
+        {
+          "step": "check",
+          "revision": 0,
+          "ms": 920,
+          "output": {
+            "contradictions": [],
+            "missing_details": [],
+            "comment": "Ответ содержит рекомендации, которые не соответствуют цели проверить работу чата, так как он предполагает устранение проблем, а не просто проверку его функционирования."
+          }
+        }
+      ]
+    }
+  ]
+}

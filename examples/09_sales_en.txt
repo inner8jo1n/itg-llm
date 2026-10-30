@@ -1,0 +1,1 @@
+Hi! We're evaluating your API for our online store. Do you offer volume discounts at around 2 million requests a month, and is there a free trial so we can test it first?

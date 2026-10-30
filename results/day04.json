@@ -1,0 +1,256 @@
+{
+  "summary": {
+    "total": 10,
+    "failed": [
+      "01_question"
+    ],
+    "by_category": {
+      "support": 2,
+      "complaint": 1,
+      "sales": 2,
+      "feedback": 3,
+      "general_question": 0,
+      "news": 1,
+      "other": 0
+    },
+    "by_sentiment": {
+      "positive": 2,
+      "neutral": 4,
+      "negative": 3
+    },
+    "by_route": {
+      "empathetic": 1,
+      "explain_news": 1,
+      "thanks": 3,
+      "technical_steps": 2,
+      "short_sales": 2
+    },
+    "by_priority": {
+      "high": [
+        "02_complaint",
+        "05_short",
+        "08_support"
+      ],
+      "medium": [
+        "07_sales",
+        "09_sales_en"
+      ],
+      "low": [
+        "03_news",
+        "04_english",
+        "06_feedback",
+        "10_other"
+      ]
+    },
+    "accuracy": {
+      "correct": 7,
+      "total": 9,
+      "mismatches": [
+        {
+          "name": "04_english",
+          "expected": "general_question",
+          "got": "feedback"
+        },
+        {
+          "name": "10_other",
+          "expected": "other",
+          "got": "feedback"
+        }
+      ]
+    }
+  },
+  "records": [
+    {
+      "name": "01_question",
+      "prompt": "v6_classify",
+      "text": "Привет! Я начинающий разработчик на Python и хочу собрать небольшой сервис, который будет отвечать на вопросы пользователей с помощью LLM. Не понимаю, с чего лучше начать: сразу подключать OpenAI API или сначала разобраться с промптами? И как не потратить кучу денег на запросы, пока я экспериментирую?",
+      "error": "Request timed out."
+    },
+    {
+      "name": "02_complaint",
+      "prompt": "v6_classify",
+      "text": "Третий раз за месяц пишу в поддержку. Заказ №48213 оплатил 2 октября, срок доставки был до 9-го, а сегодня уже 21-е и посылка до сих пор «в обработке». Курьерская служба говорит, что посылку им вообще не передавали. Деньги списаны, ответа от вас нет. Если в течение двух дней ничего не изменится, я оформлю возврат через банк и оставлю отзыв.",
+      "result": {
+        "summary": "Пользователь жалуется на задержку доставки заказа и отсутствие ответа поддержки.",
+        "category": "complaint",
+        "intent": "request_refund",
+        "sentiment": "negative",
+        "key_points": [
+          "Заказ оплачен 2 октября",
+          "Посылка не доставлена",
+          "Нет ответа от поддержки"
+        ],
+        "final_answer": "Понимаю ваше разочарование из-за задержки и отсутствия ответа. Рекомендуем связаться с нашей службой поддержки повторно, указав номер заказа и детали ситуации. Если ситуация не решится в ближайшее время, вы можете обратиться в банк для оформления возврата или оставить отзыв. Благодарим за терпение и понимание."
+      },
+      "route": "empathetic",
+      "priority": "high",
+      "issues": [
+        "final_answer speaks as 'we'"
+      ]
+    },
+    {
+      "name": "03_news",
+      "prompt": "v6_classify",
+      "text": "Городские власти объявили о запуске пилотного проекта беспилотных автобусов на двух маршрутах в центре города. Первые шесть машин выйдут на линию в декабре и будут работать с 7 до 23 часов. Первые три месяца в каждом автобусе будет находиться оператор, который сможет перехватить управление. Проезд останется по обычному тарифу. Если пилот пройдёт успешно, к 2028 году парк планируют расширить до 60 машин.",
+      "result": {
+        "summary": "Городские власти запускают пилотный проект беспилотных автобусов в центре города с расширением в будущем.",
+        "category": "news",
+        "intent": "inform_about_project",
+        "sentiment": "neutral",
+        "key_points": [
+          "Запуск в декабре",
+          "Операторы в автобусах первые три месяца",
+          "План расширения до 60 машин"
+        ],
+        "final_answer": "Этот проект позволит оценить работу беспилотных автобусов в центре города, с возможным расширением в будущем. Следите за новостями о результатах пилотного запуска и планах по расширению парка."
+      },
+      "route": "explain_news",
+      "priority": "low",
+      "issues": []
+    },
+    {
+      "name": "04_english",
+      "prompt": "v6_classify",
+      "text": "Our team moved from weekly releases to continuous deployment last quarter. Deploys are now smaller and we ship fixes within hours, but on-call engineers say alerts have doubled and nobody owns the flaky end-to-end tests. Management wants to keep the new pace. What should we focus on first so the team does not burn out?",
+      "result": {
+        "summary": "The team shifted to continuous deployment, causing more alerts and flaky tests, raising concerns about burnout.",
+        "category": "feedback",
+        "intent": "ask_advice",
+        "sentiment": "neutral",
+        "key_points": [
+          "Shift to continuous deployment",
+          "Increased alerts and flaky tests",
+          "Management wants to maintain pace"
+        ],
+        "final_answer": "Thank you for sharing the update on your shift to continuous deployment and the challenges with alerts and flaky tests. Prioritizing test stability could help reduce burnout."
+      },
+      "route": "thanks",
+      "priority": "low",
+      "issues": []
+    },
+    {
+      "name": "05_short",
+      "prompt": "v6_classify",
+      "text": "Ну вот опять. После вчерашнего обновления ничего не открывается, как обычно. Что делать-то?",
+      "result": {
+        "summary": "После обновления ничего не открывается, автор ищет решение.",
+        "category": "support",
+        "intent": "fix_software",
+        "sentiment": "negative",
+        "key_points": [
+          "Обновление произошло вчера",
+          "Ничего не открывается",
+          "Автор ищет помощь"
+        ],
+        "final_answer": "1. Попробуйте перезагрузить устройство. 2. Удалите и заново установите приложение. 3. Проверьте наличие обновлений системы. 4. Если проблема сохраняется, уточните модель устройства и версию приложения."
+      },
+      "route": "technical_steps",
+      "priority": "high",
+      "issues": []
+    },
+    {
+      "name": "06_feedback",
+      "prompt": "v6_classify",
+      "text": "Хочу сказать спасибо курьеру Андрею: привёз заказ на час раньше, помог занести тяжёлую коробку на пятый этаж и был очень вежлив. Давно не встречал такого отношения, обязательно буду заказывать у вас ещё.",
+      "result": {
+        "summary": "Автор выражает благодарность курьеру за хорошее обслуживание и планирует продолжать заказы.",
+        "category": "feedback",
+        "intent": "say_thanks",
+        "sentiment": "positive",
+        "key_points": [
+          "Курьер Андрей был вежлив",
+          "Доставил заказ раньше времени",
+          "Планирует заказывать снова"
+        ],
+        "final_answer": "Спасибо за добрые слова о курьере Андрее и его вежливости, а также за раннюю доставку и помощь. Будем рады видеть вас снова!"
+      },
+      "route": "thanks",
+      "priority": "low",
+      "issues": []
+    },
+    {
+      "name": "07_sales",
+      "prompt": "v6_classify",
+      "text": "Здравствуйте! Мы небольшая студия из 12 человек и присматриваемся к вашему тарифу «Команда». Сколько он будет стоить на год и есть ли скидка, если оплатить сразу 12 месяцев?",
+      "result": {
+        "summary": "Запрос стоимости и скидки на тариф «Команда» при оплате за год.",
+        "category": "sales",
+        "intent": "ask_price",
+        "sentiment": "neutral",
+        "key_points": [
+          "Студия из 12 человек",
+          "Интересует тариф «Команда»",
+          "Спрашивают о скидке при оплате"
+        ],
+        "final_answer": "Здравствуйте! Чтобы узнать стоимость и возможные скидки при оплате за год, пожалуйста, обратитесь к нашим специалистам или запросите коммерческое предложение."
+      },
+      "route": "short_sales",
+      "priority": "medium",
+      "issues": [
+        "final_answer speaks as 'we'"
+      ]
+    },
+    {
+      "name": "08_support",
+      "prompt": "v6_classify",
+      "text": "Не могу войти в личный кабинет: после ввода пароля пишет «Сессия истекла» и снова открывает страницу входа. Пароль сбрасывал два раза, пробовал в Chrome и в Safari — одно и то же.",
+      "result": {
+        "summary": "Проблема с входом в личный кабинет из-за сообщения о истечении сессии.",
+        "category": "support",
+        "intent": "fix_login",
+        "sentiment": "negative",
+        "key_points": [
+          "Ошибка при входе",
+          "Сообщение «Сессия истекла»",
+          "Пробовал сброс пароля и разные браузеры"
+        ],
+        "final_answer": "1. Очистите кеш и cookies браузера. 2. Попробуйте войти в режиме инкогнито. 3. Проверьте дату и время на устройстве. 4. Обновите браузеры до последней версии. Какие устройство и версия браузера используются, а также точный текст ошибки?"
+      },
+      "route": "technical_steps",
+      "priority": "high",
+      "issues": []
+    },
+    {
+      "name": "09_sales_en",
+      "prompt": "v6_classify",
+      "text": "Hi! We're evaluating your API for our online store. Do you offer volume discounts at around 2 million requests a month, and is there a free trial so we can test it first?",
+      "result": {
+        "summary": "The user inquires about volume discounts and free trial options for an API service.",
+        "category": "sales",
+        "intent": "ask_price",
+        "sentiment": "neutral",
+        "key_points": [
+          "Evaluating API for online store",
+          "Interested in discounts for 2 million requests",
+          "Asking about free trial availability"
+        ],
+        "final_answer": "You can start a free trial to test the API, and our sales team can provide details on volume discounts for around 2 million requests per month. Contact us to discuss your needs."
+      },
+      "route": "short_sales",
+      "priority": "medium",
+      "issues": [
+        "final_answer speaks as 'we'"
+      ]
+    },
+    {
+      "name": "10_other",
+      "prompt": "v6_classify",
+      "text": "Привет! Просто проверяю, работает ли этот чат 🙂",
+      "result": {
+        "summary": "Автор проверяет работу чата.",
+        "category": "feedback",
+        "intent": "say_thanks",
+        "sentiment": "positive",
+        "key_points": [
+          "Автор приветствует",
+          "Проверка работы чата",
+          "Нет проблем или запросов"
+        ],
+        "final_answer": "Спасибо за проверку! Рад, что вы используете чат, и надеюсь, он вам понравится."
+      },
+      "route": "thanks",
+      "priority": "low",
+      "issues": []
+    }
+  ]
+}

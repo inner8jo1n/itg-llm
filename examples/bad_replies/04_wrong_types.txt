@@ -1,1 +1,1 @@
-{"summary": "Пользователь жалуется на задержку заказа.", "category": "complaint", "sentiment": "negative", "key_points": "Заказ оплачен, посылка не доставлена, поддержка молчит", "final_answer": 42}
+{"category": "complaint", "intent": 42, "sentiment": ["negative"]}

@@ -3,18 +3,12 @@ from pathlib import Path
 
 from itg_llm.check_replies import REPLIES_DIR, check_reply, main
 
-GOOD = {
-    "summary": "s",
-    "category": "news",
-    "sentiment": "neutral",
-    "key_points": ["a", "b"],
-    "final_answer": "f",
-}
+GOOD = {"category": "news", "intent": "share_news", "sentiment": "neutral"}
 
 
 def test_check_reply_ok():
     assert check_reply(json.dumps(GOOD)) == (
-        "OK: category=news, sentiment=neutral, 2 key points"
+        "OK: category=news, intent=share_news, sentiment=neutral"
     )
 
 
@@ -41,13 +35,16 @@ def test_main_without_replies(tmp_path, capsys):
     assert "no .txt replies" in capsys.readouterr().err
 
 
-def test_bundled_bad_replies_fail_except_the_fenced_one():
+def test_bundled_bad_replies_fail_except_the_ok_ones():
     root = Path(__file__).parent.parent
     outcomes = {
         path.stem: check_reply(path.read_text(encoding="utf-8"))
         for path in sorted((root / REPLIES_DIR).glob("*.txt"))
     }
 
-    assert outcomes.pop("06_fenced_ok").startswith("OK")
+    assert outcomes.pop("06_fenced_ok").startswith("OK: category=sales")
+    assert outcomes.pop("07_label_spelling_ok").startswith(
+        "OK: category=general_question"
+    )
     assert outcomes
     assert all(outcome.startswith("ERROR") for outcome in outcomes.values())

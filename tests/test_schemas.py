@@ -5,104 +5,160 @@ from pydantic import ValidationError
 
 from itg_llm.schemas import (
     AnalysisResult,
+    Answer,
     Category,
+    Classification,
     LLMOutputError,
+    Meaning,
+    RequestFields,
+    SelfCheck,
     Sentiment,
     parse_response,
 )
 
-VALID = {
+MEANING = {
     "summary": "  Заказ задерживается.  ",
-    "category": "complaint",
-    "sentiment": "negative",
+    "author_goal": "Получить заказ или деньги.",
     "key_points": ["Заказ оплачен", " Срок прошёл ", "Ответа нет"],
-    "final_answer": "Напишите в поддержку ещё раз.",
+    "facts": ["Заказ №48213", "Оплачен 2 октября"],
+}
+CLASSIFICATION = {
+    "category": "complaint",
+    "intent": " get_order ",
+    "sentiment": "negative",
 }
 
 
-def error_fields(data):
+def error_fields(data, schema):
     with pytest.raises(ValidationError) as info:
-        AnalysisResult.model_validate(data)
+        schema.model_validate(data)
     return {error["loc"][0] for error in info.value.errors()}
 
 
-def test_valid_data_is_parsed_and_stripped():
-    result = AnalysisResult.model_validate(VALID)
+def test_meaning_is_parsed_and_stripped():
+    meaning = Meaning.model_validate(MEANING)
+    assert meaning.summary == "Заказ задерживается."
+    assert meaning.key_points == ["Заказ оплачен", "Срок прошёл", "Ответа нет"]
+    assert meaning.facts == ["Заказ №48213", "Оплачен 2 октября"]
 
-    assert result.summary == "Заказ задерживается."
+
+def test_meaning_allows_no_facts_but_needs_key_points():
+    assert Meaning.model_validate({**MEANING, "facts": []}).facts == []
+    assert error_fields({**MEANING, "key_points": []}, Meaning) == {
+        "key_points"
+    }
+
+
+def test_classification_is_parsed():
+    result = Classification.model_validate(CLASSIFICATION)
     assert result.category is Category.COMPLAINT
+    assert result.intent == "get_order"
     assert result.sentiment is Sentiment.NEGATIVE
-    assert result.key_points == ["Заказ оплачен", "Срок прошёл", "Ответа нет"]
-    assert result.final_answer == "Напишите в поддержку ещё раз."
 
 
-def test_labels_are_case_and_space_insensitive():
-    data = {**VALID, "category": " Complaint ", "sentiment": "NEGATIVE"}
-    result = AnalysisResult.model_validate(data)
-    assert result.category is Category.COMPLAINT
-    assert result.sentiment is Sentiment.NEGATIVE
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        (" Complaint ", Category.COMPLAINT),
+        ("GENERAL_QUESTION", Category.GENERAL_QUESTION),
+        ("general question", Category.GENERAL_QUESTION),
+        ("general-question", Category.GENERAL_QUESTION),
+    ],
+)
+def test_category_spelling_is_normalized(raw, expected):
+    data = {**CLASSIFICATION, "category": raw}
+    assert Classification.model_validate(data).category is expected
+
+
+def test_request_fields_allow_empty_lists():
+    fields = RequestFields(
+        subject="Заказ",
+        requested_action="Вернуть деньги",
+        details=[],
+        missing_info=[],
+    )
+    assert fields.details == fields.missing_info == []
+
+
+@pytest.mark.parametrize(
+    ("contradictions", "missing", "passed"),
+    [
+        ([], [], True),
+        (["x"], [], False),
+        ([], ["y"], True),
+        (["x"], ["y"], False),
+    ],
+)
+def test_self_check_passed(contradictions, missing, passed):
+    check = SelfCheck(
+        contradictions=contradictions, missing_details=missing, comment="c"
+    )
+    assert check.passed is passed
+
+
+def test_analysis_result_holds_every_step_in_chain_order():
+    assert list(AnalysisResult.model_fields) == [
+        *Meaning.model_fields,
+        *Classification.model_fields,
+        *RequestFields.model_fields,
+        *Answer.model_fields,
+    ]
 
 
 def test_extra_fields_are_ignored():
-    result = AnalysisResult.model_validate({**VALID, "confidence": 0.9})
-    assert not hasattr(result, "confidence")
+    result = Classification.model_validate({**CLASSIFICATION, "x": 1})
+    assert not hasattr(result, "x")
 
 
-def test_dump_gives_plain_json_values():
-    dumped = AnalysisResult.model_validate(VALID).model_dump(mode="json")
-    assert dumped["category"] == "complaint"
-    assert dumped["sentiment"] == "negative"
-
-
-@pytest.mark.parametrize("field", list(VALID))
-def test_missing_field(field):
-    data = {key: value for key, value in VALID.items() if key != field}
-    assert error_fields(data) == {field}
+@pytest.mark.parametrize(
+    ("schema", "data"),
+    [(Meaning, MEANING), (Classification, CLASSIFICATION)],
+)
+def test_missing_field(schema, data):
+    for field in data:
+        partial = {key: value for key, value in data.items() if key != field}
+        assert error_fields(partial, schema) == {field}
 
 
 @pytest.mark.parametrize(
     ("field", "value"),
     [
-        ("summary", ""),
-        ("summary", "   "),
-        ("summary", 42),
         ("category", "rant"),
         ("category", 1),
+        ("intent", None),
+        ("intent", " "),
         ("sentiment", "angry"),
-        ("key_points", "one, two, three"),
-        ("key_points", []),
-        ("key_points", ["ok", ""]),
-        ("key_points", ["ok", 2]),
-        ("final_answer", None),
     ],
 )
-def test_wrong_value_or_type(field, value):
-    assert error_fields({**VALID, field: value}) == {field}
+def test_wrong_classification_value(field, value):
+    data = {**CLASSIFICATION, field: value}
+    assert error_fields(data, Classification) == {field}
 
 
 def test_enums_list_allowed_values():
     assert [c.value for c in Category] == [
-        "question",
+        "support",
         "complaint",
-        "news",
+        "sales",
         "feedback",
+        "general_question",
+        "news",
         "other",
     ]
     assert [s.value for s in Sentiment] == ["positive", "neutral", "negative"]
 
 
-def test_parse_response_returns_result():
-    result = parse_response(json.dumps(VALID))
+def test_parse_response_returns_the_given_schema():
+    result = parse_response(json.dumps(CLASSIFICATION), Classification)
     assert result.category is Category.COMPLAINT
+    answer = parse_response('{"final_answer": "Да"}', Answer)
+    assert answer.final_answer == "Да"
 
 
-def test_parse_response_strips_code_fence():
-    raw = "```json\n" + json.dumps(VALID) + "\n```"
-    assert parse_response(raw).sentiment is Sentiment.NEGATIVE
-
-
-def test_parse_response_strips_bare_code_fence():
-    assert parse_response("```" + json.dumps(VALID) + "```").summary
+def test_parse_response_strips_code_fences():
+    raw = json.dumps(CLASSIFICATION)
+    for fenced in ("```json\n" + raw + "\n```", "```" + raw + "```"):
+        assert parse_response(fenced, Classification).intent == "get_order"
 
 
 @pytest.mark.parametrize(
@@ -122,58 +178,83 @@ def test_parse_response_strips_bare_code_fence():
 )
 def test_parse_response_explains_broken_json(raw, message):
     with pytest.raises(LLMOutputError) as info:
-        parse_response(raw)
+        parse_response(raw, Classification)
     assert str(info.value).startswith(message)
 
 
 @pytest.mark.parametrize(
-    ("changes", "message"),
+    ("schema", "data", "changes", "message"),
     [
         (
-            {"final_answer": None},
-            "field 'final_answer' must be a string, got null",
+            Classification,
+            CLASSIFICATION,
+            {"intent": None},
+            "field 'intent' must be a string, got null",
         ),
-        ({"summary": 42}, "field 'summary' must be a string, got number"),
-        ({"summary": " "}, "field 'summary' must not be empty"),
         (
+            Classification,
+            CLASSIFICATION,
             {"category": "rant"},
-            "field 'category' must be one of question, complaint, news, "
-            "feedback or other, got 'rant'",
+            "field 'category' must be one of support, complaint, sales, "
+            "feedback, general_question, news or other, got 'rant'",
         ),
         (
+            Classification,
+            CLASSIFICATION,
             {"sentiment": "angry"},
             "field 'sentiment' must be one of positive, neutral or negative, "
             "got 'angry'",
         ),
         (
+            Meaning,
+            MEANING,
+            {"summary": 42},
+            "field 'summary' must be a string, got number",
+        ),
+        (
+            Meaning,
+            MEANING,
+            {"summary": " "},
+            "field 'summary' must not be empty",
+        ),
+        (
+            Meaning,
+            MEANING,
             {"key_points": "a, b"},
             "field 'key_points' must be a list, got string",
         ),
-        ({"key_points": []}, "field 'key_points' must not be an empty list"),
         (
-            {"key_points": ["a", 2]},
-            "field 'key_points[1]' must be a string, got number",
+            Meaning,
+            MEANING,
+            {"key_points": []},
+            "field 'key_points' must not be an empty list",
+        ),
+        (
+            Meaning,
+            MEANING,
+            {"facts": ["a", 2]},
+            "field 'facts[1]' must be a string, got number",
         ),
     ],
 )
-def test_parse_response_explains_schema_errors(changes, message):
+def test_parse_response_explains_schema_errors(schema, data, changes, message):
     with pytest.raises(LLMOutputError) as info:
-        parse_response(json.dumps({**VALID, **changes}))
+        parse_response(json.dumps({**data, **changes}), schema)
     assert str(info.value) == (
         "Model JSON does not match the schema: " + message
     )
 
 
 def test_parse_response_lists_every_problem():
-    data = {key: value for key, value in VALID.items() if key != "summary"}
-    data["category"] = "rant"
+    data = {"category": "rant"}
 
     with pytest.raises(LLMOutputError) as info:
-        parse_response(json.dumps(data))
+        parse_response(json.dumps(data), Classification)
 
     message = str(info.value)
-    assert "field 'summary' is missing" in message
     assert "field 'category' must be one of" in message
+    assert "field 'intent' is missing" in message
+    assert "field 'sentiment' is missing" in message
 
 
 def test_llm_output_error_is_a_value_error():

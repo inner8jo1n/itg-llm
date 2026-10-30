@@ -1,7 +1,7 @@
 [project]
 name = "itg-llm"
 version = "0.1.0"
-description = "LLM pipeline for text processing: summary, key points and a helpful response"
+description = "Multi-step text analysis with classification, routing and guardrails"
 readme = "README.md"
 authors = [
     { name = "imiderji", email = "skishou.developer@yandex.ru" }
@@ -15,8 +15,10 @@ dependencies = [
 
 [project.scripts]
 itg-llm = "itg_llm.main:main"
+itg-llm-demo = "itg_llm.demo:main"
 itg-llm-compare = "itg_llm.compare:main"
 itg-llm-check-replies = "itg_llm.check_replies:main"
+itg-llm-compare-routes = "itg_llm.compare_routes:main"
 
 [build-system]
 requires = ["uv_build>=0.10.10,<0.11.0"]

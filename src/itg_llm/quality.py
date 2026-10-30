@@ -2,10 +2,10 @@ import re
 
 from itg_llm.prompts import (
     KEY_POINTS_COUNT,
-    MAX_ANSWER_CHARS,
     MAX_KEY_POINT_WORDS,
     MAX_SUMMARY_CHARS,
 )
+from itg_llm.routing import Route
 from itg_llm.schemas import AnalysisResult
 from itg_llm.utils import language
 
@@ -13,9 +13,12 @@ from itg_llm.utils import language
 FIRST_PERSON_PLURAL = re.compile(
     r"\b(мы|нам|нас|наш\w*|we|us|our|ours)\b", re.IGNORECASE
 )
+NUMBERED_STEP = re.compile(r"(^|\s)1[.)]\s")
 
 
-def check_quality(result: AnalysisResult, text: str) -> list[str]:
+def check_quality(
+    result: AnalysisResult, text: str, route: Route
+) -> list[str]:
     """Return the format and style problems of one validated result."""
     issues = []
     summary = result.summary
@@ -37,10 +40,13 @@ def check_quality(result: AnalysisResult, text: str) -> list[str]:
                 f"key point {number} is {words} words "
                 f"(max {MAX_KEY_POINT_WORDS})"
             )
-    if len(answer) > MAX_ANSWER_CHARS:
+    if len(answer) > route.max_chars:
         issues.append(
-            f"final_answer is {len(answer)} chars (max {MAX_ANSWER_CHARS})"
+            f"final_answer is {len(answer)} chars "
+            f"(max {route.max_chars} for {route.name})"
         )
+    if route.numbered_steps and not NUMBERED_STEP.search(answer):
+        issues.append(f"final_answer has no numbered steps ({route.name})")
 
     expected = language(text)
     for field, value in (("summary", summary), ("final_answer", answer)):

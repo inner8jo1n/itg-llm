@@ -11,26 +11,50 @@ def reply(answer="Короткий ответ.", points=3):
     return json.dumps(
         {
             "summary": "Краткое содержание.",
+            "author_goal": "Получить совет.",
             "key_points": [f"Мысль {n}" for n in range(points)],
-            "category": "question",
+            "facts": [],
+            "category": "general_question",
+            "intent": "ask_advice",
             "sentiment": "neutral",
+            "subject": "Совет",
+            "requested_action": "Дать совет",
+            "details": [],
+            "missing_info": [],
             "final_answer": answer,
+            "contradictions": [],
+            "missing_details": [],
+            "comment": "Ок.",
         }
     )
 
 
 class FakeClient:
-    """Replies with the next item of `replies` on every call."""
+    """Starts every text with the next item of `replies`.
+
+    Every reply has the fields of all chain steps, so the reply that the
+    first step of a text got also serves the later steps of that text.
+    """
 
     def __init__(self, replies):
         self.replies = list(replies)
         self.systems = []
+        self.last = ""
 
     def complete(self, system, user, json_mode=False):
+        if user.startswith(LATER_STEPS):
+            return self.last
         self.systems.append(system)
-        return self.replies.pop(0)
+        self.last = self.replies.pop(0)
+        return self.last
 
 
+LATER_STEPS = (
+    "Classify the request",
+    "Build the structured fields",
+    "Write the answer",
+    "Check the answer",
+)
 INPUTS = [("a", "Первый текст"), ("b", "Второй текст")]
 
 
@@ -68,6 +92,7 @@ def test_summarize_counts_failures_issues_and_spread():
         [
             reply("Ответ."),  # a, run 1
             "not json",  # b, run 1
+            "not json",  # fallback also fails
             reply("Ответ длиннее.", points=2),  # a, run 2
             reply("Ответ."),  # b, run 2
         ]
@@ -89,7 +114,7 @@ def test_summarize_counts_failures_issues_and_spread():
 
 
 def test_summarize_all_failed():
-    records = compare(INPUTS, FakeClient(["bad", "bad"]), [FIRST], runs=1)
+    records = compare(INPUTS, FakeClient(["bad"] * 4), [FIRST], runs=1)
     [row] = summarize(records)
     assert row["failed"] == 2
     assert row["avg_answer_chars"] == 0
@@ -120,7 +145,7 @@ def test_main_saves_json_and_table(tmp_path, monkeypatch):
     code = compare_module.main(
         [
             "--prompts",
-            "v5_structured",
+            "v7_extract",
             "--runs",
             "1",
             "--examples",
@@ -132,11 +157,16 @@ def test_main_saves_json_and_table(tmp_path, monkeypatch):
 
     assert code == 0
     saved = json.loads(output.read_text(encoding="utf-8"))
-    assert [record["prompt"] for record in saved] == ["v5_structured"]
+    assert [record["prompt"] for record in saved] == ["v7_extract"]
     table = (tmp_path / "out" / "cmp.md").read_text(encoding="utf-8")
-    assert "| v5_structured | 1 | 0 |" in table
+    assert "| v7_extract | 1 | 0 |" in table
 
 
 def test_main_rejects_zero_runs():
     with pytest.raises(SystemExit):
         compare_module.main(["--runs", "0"])
+
+
+def test_missing_examples_has_readable_error(tmp_path, capsys):
+    assert compare_module.main(["--examples", str(tmp_path)]) == 1
+    assert "No .txt examples" in capsys.readouterr().err

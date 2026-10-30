@@ -1,17 +1,11 @@
 import argparse
-import logging
 import sys
 from pathlib import Path
 from statistics import mean
 
 from itg_llm.llm_client import LLMClient
-from itg_llm.main import (
-    EXAMPLES_DIR,
-    Completer,
-    load_inputs,
-    run,
-    save_json,
-)
+from itg_llm.main import EXAMPLES_DIR, load_inputs, save_json, setup_logging
+from itg_llm.pipeline import Completer, run
 from itg_llm.prompts import PROMPTS, PromptVariant
 
 OUTPUT_PATH = Path("results/comparison.json")
@@ -122,28 +116,28 @@ def main(argv: list[str] | None = None) -> int:
     if args.runs < 1:
         parser.error("--runs must be at least 1")
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
-    )
+    setup_logging()
     try:
+        inputs = load_inputs(None, None, args.examples)
         client = LLMClient()
-    except RuntimeError as error:
+    except (RuntimeError, OSError, ValueError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
-    inputs = load_inputs(None, None, args.examples)
     prompts = [PROMPTS[name] for name in args.prompts]
     records = compare(inputs, client, prompts, args.runs)
-    save_json(records, args.output)
-
     table = to_markdown(summarize(records))
     table_path = args.output.with_suffix(".md")
-    table_path.write_text(table, encoding="utf-8")
+    try:
+        save_json(records, args.output)
+        table_path.write_text(table, encoding="utf-8")
+    except OSError as error:
+        print(f"ERROR: Cannot save comparison: {error}", file=sys.stderr)
+        return 1
     print()
     print(table)
     print(f"Saved answers to {args.output} and the table to {table_path}")
-    return 0
+    return 1 if any("error" in record for record in records) else 0
 
 
 if __name__ == "__main__":
